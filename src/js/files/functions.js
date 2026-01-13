@@ -768,44 +768,44 @@ export function dataMediaQueries(array, dataSetValue) {
 
 export function setBodyHeightsVars(headerSelector='.header', footerSelector = '.footer') {
   document.addEventListener("DOMContentLoaded", () => {
-    const header = document.querySelector(headerSelector);
-    const footer = document.querySelector(footerSelector);
-    if (header) {
-      const headerHeight = header.offsetHeight;
-      document.body.style.setProperty('--headerHeight', `${headerHeight}px`);
-    }
-    if (footer) {
-      const footerHeight = footer.offsetHeight;
-      document.body.style.setProperty('--footerHeight', `${footerHeight}px`);
-    }
-
-    window.addEventListener('resize', () => {
-      if (header) {
-        const headerHeight = header.offsetHeight;
-        document.body.style.setProperty('--headerHeight', `${headerHeight}px`);
-        setTimeout(() => {
-          const headerHeight = header.offsetHeight;
-          document.body.style.setProperty('--headerHeight', `${headerHeight}px`);
-        }, 200);
-      }
-      if (footer) {
-        const footerHeight = footer.offsetHeight;
-        document.body.style.setProperty('--footerHeight', `${footerHeight}px`);
-      }
+    setBodyHeightsVar({
+      headerSelector,
+      footerSelector,
+      headerVarName: '--headerHeight',
+      footerVarName: '--footerHeight'
     })
 
-    window.addEventListener('scroll', ()=>{
-      if (header) {
-        const headerHeight = header.offsetHeight;
-        document.body.style.setProperty('--headerScrollHeight', `${headerHeight}px`);
-      }
-      if (footer) {
-        const footerHeight = footer.offsetHeight;
-        document.body.style.setProperty('--footerScrollHeight', `${footerHeight}px`);
-      }
-    })
+    setInterval(() => {
+      setBodyHeightsVar({
+        headerSelector,
+        footerSelector,
+        headerVarName: '--headerScrollHeight',
+        footerVarName: '--footerScrollHeight'
+      })
+    }, 500);
   })
 }
+
+function setBodyHeightsVar({
+  headerSelector,
+  footerSelector,
+  headerVarName,
+  footerVarName
+}) {
+  const header = document.querySelector(headerSelector);
+  const footer = document.querySelector(footerSelector);
+  const bxPanel = document.querySelector('#bx-panel');
+
+  const headerHeight = header?.offsetHeight || 0;
+  document.body.style.setProperty(headerVarName, `${headerHeight}px`);
+
+  const footerHeight = footer?.offsetHeight || 0;
+  document.body.style.setProperty(footerVarName, `${footerHeight}px`);
+
+  const bxPanelHeight = bxPanel?.offsetHeight || 0;
+  document.body.style.setProperty('--bxPanelHeight', `${bxPanelHeight}px`);
+}
+
 export function wrap(el, tagName = 'div',  className = 'wrapper', dopHTML = null, dopHTMLPlacement='beforeend') {
 
   let nextEl = el.nextElementSibling;

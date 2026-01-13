@@ -26,24 +26,39 @@ const fontsConditions = {
   'thin': {
     weight: 100
   },
-  'extralight': {
-    weight: 200
-  },
   'light': {
     weight: 300
+  },
+  'extralight': {
+    weight: 200
   },
   'medium': {
     weight: 500
   },
-  'semibold': {
-    weight: 600
-  },
   'bold': {
     weight: 700
+  },
+  'semibold': {
+    weight: 600
   },
   'extrabold': {
     weight: 900
   },
+}
+
+const fontTransformer = (font) => {
+  Object.keys(fontsConditions).forEach(key=>{
+    const value = fontsConditions[key];
+    if (font.basename.toLowerCase().includes(key)) {
+      if (value.weight) {
+        font.weight = value.weight;
+      }
+    }
+  })
+  if (font.basename.toLowerCase().includes('italic')) {
+    font.style = 'italic';
+  }
+  return font
 }
 
 
@@ -89,23 +104,10 @@ export default defineConfig({
     Unfonts({
       custom: {
         families: [{
-          name: 'IBM Plex Sans',
-          local: 'IBM Plex Sans',
+          name: 'Noto Sans',
+          local: 'Noto Sans',
           src: './public/fonts/*',
-          transform(font) {
-            Object.keys(fontsConditions).forEach(key=>{
-              const value = fontsConditions[key];
-              if (font.basename.toLowerCase().includes(key)) {
-                if (value.weight) {
-                  font.weight = value.weight;
-                }
-              }
-            })
-            if (font.basename.toLowerCase().includes('italic')) {
-              font.style = 'italic';
-            }
-            return font
-          }
+          transform: fontTransformer
         }],
         display: 'swap',
         preload: true,

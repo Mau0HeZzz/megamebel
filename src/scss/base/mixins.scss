@@ -28,6 +28,11 @@
 	$result: math.div($px, $from) * 100vh;
 	@return $result;
 }
+
+@function lsp($percents) {
+	$result: calc((var(--font-size) / 100) * $percents);
+	@return $result;
+}
 //REM
 @function toRem($px, $current: 16) {
 	$result: math.div($px, $current) + rem;
@@ -74,7 +79,7 @@
 }
 
 // Адаптивное свойство (clamp)
-@mixin adaptiveValue($property, $startSize, $minSize, $widthFrom: 1920, $widthTo: 360, $keepSize: 0, $isContainer: 0) {
+@mixin adaptiveValue($property, $startSize, $minSize, $widthFrom: 1280, $widthTo: 360, $keepSize: 0, $isContainer: 0) {
 	@if ($startSize==0) {
 		$startSize: 0.000001;
 	}

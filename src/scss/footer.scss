@@ -1,3 +1,249 @@
-//====================================================================================================
+@use "sass:math";
+@use "/src/scss/base/mixins.scss";
+@use "/src/scss/variables.scss";
 
-//====================================================================================================
+.footer {
+  background-color: var(--plate-bg-color);
+  border-radius: var(--brad) var(--brad) 0 0;
+
+  @include mixins.adaptiveValue("--brad", 30, 20, 1280, 768);
+
+  &__container {
+    padding-bottom: mixins.toRem(40);
+    @include mixins.adaptiveValue("padding-top", 80, 30, 1280, 360);
+
+    @media (width < #{mixins.toEm(variables.$mobile)}){
+      padding-bottom: mixins.toRem(102);
+    }
+  }
+
+  &__main {
+    border-bottom: mixins.toRem(1) solid var(--stroke-color);
+
+    @include mixins.adaptiveValue("padding-bottom", 40, 20, 1280, 480);
+  }
+
+  &__middle {
+    border-bottom: mixins.toRem(1) solid var(--stroke-color);
+  }
+
+  &__bottom {
+    text-align: center;
+    font-size: mixins.toRem(13);
+    line-height: 1.4;
+    color: var(--grey-color);
+    padding-top: mixins.toRem(30);
+  }
+}
+.main-footer {
+  display: grid;
+  gap: mixins.toRem(16);
+  
+  @media (width >= #{mixins.toEm(variables.$mobile)}){
+    gap: mixins.toRem(40) mixins.toRem(60);
+  }
+
+  @media (width >= #{mixins.toEm(variables.$tablet)}){
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  @media (#{mixins.toEm(variables.$mobile)} < width < #{mixins.toEm(variables.$tablet)}){
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  &__column {
+    list-style: none;
+    @media (width >= #{mixins.toEm(variables.$tablet)}){
+      &:not(.main-footer__contancts):not(:has(+.main-footer__contancts)) {
+        grid-row: 1 / span 2;
+      }
+    }
+
+    &_catalog {
+      @media (#{mixins.toEm(variables.$mobile)} < width < #{mixins.toEm(variables.$tablet)}){
+        order: 1;
+        grid-column: 1 / span 2;
+
+        .main-footer__body {
+          display: grid;
+          grid-template-columns: repeat(2, 1fr);
+          column-gap: mixins.toRem(20);
+        }
+      }
+    }
+  }
+
+  &__title {
+    list-style: none;
+    font-weight: 600;
+    font-size: mixins.toRem(16);
+    line-height: math.div(24 , 16);
+
+    
+    @media (width >= #{mixins.toEm(variables.$mobile)}){
+      pointer-events: none;
+      &:not(:last-child) {margin-bottom: mixins.toRem(24);}
+    }
+
+    @media (width < #{mixins.toEm(variables.$mobile)}){
+      background-color: var(--white-color);
+      padding: mixins.toRem(12) mixins.toRem(16);
+      border-radius: mixins.toRem(8);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: mixins.toRem(8);
+
+      &::after{
+        content:'';
+        flex: 0 0 mixins.toRem(24);
+        width: mixins.toRem(24);
+        height: mixins.toRem(24);
+        background-image: url("data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12.0001 13.1714L16.9499 8.22168L18.3641 9.63589L12.0001 15.9999L5.63623 9.63589L7.05044 8.22168L12.0001 13.1714Z' fill='%23666666'/%3E%3C/svg%3E%0A");
+        .loaded & {
+          transition: all 0.3s ease 0s;
+        }
+      }
+
+      &._spoller-active {
+        &::after{
+          rotate: 180deg;
+        }
+      }
+    }
+  }
+
+  &__body {
+    display: flex;
+    flex-direction: column;
+    gap: mixins.toRem(12);
+    
+    a {
+      color: var(--grey-color);
+      font-size: mixins.toRem(16);
+      line-height: math.div(22 , 16);
+      &[href] {
+        @media (any-hover: hover){
+          &:hover{
+            color: var(--accent-hover-color);
+            text-decoration: underline;
+          }
+        }
+      }
+    }
+
+    @media (width < #{mixins.toEm(variables.$mobile)}){
+      padding: mixins.toRem(16) mixins.toRem(14) 0;
+    }
+  }
+
+  &__contancts {
+    @media (width >= #{mixins.toEm(variables.$tablet)}){
+      grid-row-start: 2;
+    }
+    @media (#{mixins.toEm(variables.$mobile)} < width < #{mixins.toEm(variables.$tablet)}){
+      order: 2;
+    }
+
+    a {
+      display: grid;
+      grid-template-columns: mixins.toRem(20) auto;
+      gap: mixins.toRem(8) mixins.toRem(6);
+      color: var(--black-color);
+
+      span {
+        grid-column-start: 2;
+        font-size: mixins.toRem(14);
+        line-height: math.div(20 , 14);
+        color: var(--grey-color);
+      }
+    }
+  }
+}
+.middle-footer {
+  align-items: center;
+  justify-content: space-between;
+  padding: mixins.toRem(20) 0;
+  gap: mixins.toRem(20);
+  
+  @media (width >= #{mixins.toEm(variables.$tablet)}){
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+  }
+  @media (width < #{mixins.toEm(variables.$tablet)}){
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__text {
+    text-align: center;
+    font-size: mixins.toRem(13);
+    line-height: 1.4;
+    color: var(--grey-color);
+    
+    @media (width >= #{mixins.toEm(variables.$tablet)}){
+      max-width: mixins.toRem(320);
+    }
+  }
+
+  &__pay {
+    display: flex;
+    justify-content: flex-end;
+    gap: mixins.toRem(12);
+  }
+}
+
+//==========================================================================================
+
+.mobile-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  background-color: var(--plate-bg-color);
+  padding: mixins.toRem(10) 0 mixins.toRem(13);
+  border-top: mixins.toRem(1) solid var(--stroke-color);
+
+  &__link {
+    display: flex;
+    flex-direction: column;
+    justify-content:center;align-items: center;
+    gap: mixins.toRem(4);
+    position: relative;
+    padding: 0 mixins.toRem(7);
+    font-size: mixins.toRem(12);
+    line-height: math.div(18 , 12);
+    transition: color 0.3s ease 0s;
+
+    @media (any-hover: hover){
+      &:hover{
+        color: var(--accent-color);
+      }
+    }
+
+    i {
+      --bgc: var(--red-color);
+      position: absolute;
+      width: mixins.toRem(16);
+      height: mixins.toRem(16);
+      background-color: var(--bgc);
+      color: var(--white-color);
+      display: flex;
+      justify-content:center;align-items: center;
+      border-radius: 50%;
+      font-style: normal;
+      border: mixins.toRem(2) solid var(--white-color);
+      font-size: mixins.toRem(8);
+      top: 0;
+      right: 50%;
+      translate: 100% -25%;
+    }
+
+    strong {
+      font-size: mixins.toRem(13);
+      font-weight: 500;
+    }
+  }
+}

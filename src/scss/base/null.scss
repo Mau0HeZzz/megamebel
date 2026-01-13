@@ -28,7 +28,7 @@ body {
 	min-width: variables.$minWidth + px;
 }
 body {
-	color: variables.$mainColor;
+	color: var(--black-color);
 	line-height: 1;
 	font-family: variables.$fontFamily;
 	font-size: variables.$fontSize;

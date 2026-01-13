@@ -20,6 +20,7 @@
   "dependencies": {
     "@kingkongdevs/vite-plugin-html-includes": "^1.0.5",
     "@splidejs/splide": "^4.1.4",
+    "air-datepicker": "latest",
     "cheerio": "^1.0.0",
     "copy-to-clipboard": "^3.3.3",
     "cssnano": "^7.0.6",
@@ -38,7 +39,6 @@
     "vite-plugin-compression": "^0.5.1",
     "vite-plugin-handlebars": "^2.0.0",
     "vite-plugin-html-inject": "^1.1.2",
-    "vite-plugin-image-optimizer": "^1.1.8",
-		"air-datepicker": "latest"
+    "vite-plugin-image-optimizer": "^1.1.8"
   }
 }

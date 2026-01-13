@@ -34,6 +34,7 @@ import * as mhzFunctions from "./files/functions.js";
 mhzFunctions.addLoadedClass();
 /* Модуль для работы с меню (Бургер) */
 mhzFunctions.menuInit();
+mhzFunctions.setBodyHeightsVars();
 /* Форматирование чисел */
 // import './libs/wNumb.min.js';
 
@@ -42,7 +43,7 @@ mhzFunctions.menuInit();
 Документация: https://start-template.ru/modul-spojlery-chertogi-frilansera-v3-0-0/
 Сниппет (HTML): spollers
 */
-// mhzFunctions.spollers();
+mhzFunctions.spollers();
 
 /*
 Модуль "Табы"
