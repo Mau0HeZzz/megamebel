@@ -1,5 +1,5 @@
 // Подключение функционала "Чертоги Фрилансера"
-import { debounce, isMobile } from "./functions.js";
+import { bodyLockToggle, bodyUnlock, debounce, isMobile } from "./functions.js";
 // Подключение списка активных модулей
 import { mhzModules } from "./modules.js";
 
@@ -13,11 +13,15 @@ document.addEventListener('DOMContentLoaded', () => {
   if (headerCatalog) {
     headerCatalogActions(headerCatalog);
   }
+
+  setMaxHeight('.categories__slide span');
+  setMaxHeight('.product-slide__name', '.productslider');
 })
 
 document.addEventListener('click', (e) => {
   if (e.target.closest('[data-header-catalog-btn]')) {
     document.documentElement.classList.toggle('catalog-open');
+    bodyLockToggle();
   }
 
   if (e.target.closest('.menu-top-header__link')) {
@@ -43,6 +47,23 @@ document.addEventListener('click', (e) => {
       links.forEach(link => link.classList.remove('_active'))
     }
   }
+
+  const productAction = e.target.closest('[data-comparsion-btn]') || e.target.closest('[data-fav-btn]');
+  if (productAction) {
+    e.preventDefault();
+    productAction.classList.toggle('_active')
+  }
+
+  checkCatalog(e)
+})
+
+window.addEventListener('scroll', (e) => {
+  document.body.style.setProperty('--scrollY', `${window.scrollY}px`)
+})
+
+window.addEventListener('resize', () => {
+  setMaxHeight('.categories__slide span');
+  setMaxHeight('.product-slide__name', '.productslider');
 })
 
 
@@ -121,3 +142,46 @@ function onTopHeaderLinkClick(target, event) {
   }
 }
 
+function checkCatalog(e) {
+  const catalogTarget = e.target.closest('[data-catalog-header]')
+  const catalogBtnTarget = e.target.closest('[data-header-catalog-btn]')
+
+  if (catalogTarget||catalogBtnTarget) return;
+
+  document.documentElement.classList.remove('catalog-open');
+  bodyUnlock();
+}
+
+function setMaxHeight(selector, parentSelector) {
+  const parents = parentSelector ? document.querySelectorAll(parentSelector) : [document];
+  if (!parents.length) return;
+
+  parents.forEach(parent => {
+    const els = parent.querySelectorAll(selector);
+  
+    if (!els.length) return;
+    els.forEach(el => el.style.removeProperty('--min-height'));
+  
+    const heights = [...els].map(el => el.offsetHeight);
+    const max = Math.max(...heights);
+  
+    els.forEach(el => el.style.setProperty('--min-height', `${max}px`));
+  })
+}
+
+function setMinHeight(selector, parentSelector) {
+  const parents = parentSelector ? document.querySelectorAll(parentSelector) : [document];
+  if (!parents.length) return;
+
+  parents.forEach(parent => {
+    const els = parent.querySelectorAll(selector);
+  
+    if (!els.length) return;
+    els.forEach(el => el.style.remoiveProperty('--max-height'));
+  
+    const heights = [...els].map(el => el.offsetHeight);
+    const max = Math.min(...heights);
+  
+    els.forEach(el => el.style.setProperty('--max-height', `${max}px`));
+  })
+}

@@ -1023,8 +1023,8 @@
     position: fixed;
     left: 0;
     right: 0;
-    top: calc(var(--headerHeight));
-    max-height: calc(100dvh - var(--headerHeight));
+    top: calc(var(--headerHeight) - var(--scrollY, 0px));
+    max-height: calc(100dvh - var(--headerHeight) + var(--scrollY, 0px));
     overflow: hidden;
     opacity: 0;
     pointer-events: none;
@@ -1062,7 +1062,7 @@
       padding: mixins.toRem(30) 0;
       padding-right: mixins.toRem(18);
       border-right: mixins.toRem(1) solid var(--stroke-color);
-      max-height: calc(100dvh - var(--headerHeight));
+      max-height: calc(100dvh - var(--headerHeight) + var(--scrollY, 0px));
     }
   }
 
@@ -1116,7 +1116,7 @@
     
     @media (width >= #{mixins.toEm(variables.$mobile)}){
       padding: mixins.toRem(30) 0;
-      max-height: calc(100dvh - var(--headerHeight));
+      max-height: calc(100dvh - var(--headerHeight) + var(--scrollY, 0px));
     }
     @media (width < #{mixins.toEm(variables.$mobile)}){
       position: absolute;

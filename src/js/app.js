@@ -50,14 +50,14 @@ mhzFunctions.spollers();
 Документация: https://start-template.ru/modul-taby-chertogi-frilansera-v3-0-0/
 Сниппет (HTML): tabs
 */
-//mhzFunctions.tabs();
+mhzFunctions.tabs();
 
 /*
 Модуль "Показать еще"
 Документация: https://start-template.ru/modul-pokazat-eshhe-chertogi-frilansera-v3-0-0/
 Сниппет (HTML): showmore
 */
-// mhzFunctions.showMore();
+mhzFunctions.showMore();
 
 /*
 Модуль "До/После"

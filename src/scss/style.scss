@@ -43,7 +43,6 @@ body {
 	flex-direction: column;
 	overflow: hidden;
   padding-top: var(--bxPanelHeight);
-  background-color: #000;
 	@supports (overflow: clip) {
 		overflow: clip;
 	}
