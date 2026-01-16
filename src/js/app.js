@@ -32,6 +32,7 @@ import * as mhzFunctions from "./files/functions.js";
 // mhzFunctions.addTouchClass();
 /* Добавление loaded для HTML после полной загрузки страницы */
 mhzFunctions.addLoadedClass();
+mhzFunctions.dragCloseActions();
 /* Модуль для работы с меню (Бургер) */
 mhzFunctions.menuInit();
 mhzFunctions.setBodyHeightsVars();
@@ -115,7 +116,7 @@ flsForms.formFieldsInit({
 */
 /* Отправка формы */
 /* Документация: https://start-template.ru/rabota-s-formami-i-elementami-form-chertogi-frilansera-v3-0-0/ */
-// flsForms.formSubmit();
+flsForms.formSubmit();
 
 /* Модуль формы"количество" */
 /* Документация: https://start-template.ru/modul-formy-kolichestvo-chertogi-frilansera-v3-0-0/ */
@@ -146,7 +147,7 @@ import "./files/forms/inputmask.js";
 Документация плагина: https://refreshless.com/nouislider/
 Сниппет (HTML): range
 */
-// import "./files/forms/range.js";
+import "./files/forms/range.js";
 
 /* Модуль работы с подсказками (tippy) */
 /*

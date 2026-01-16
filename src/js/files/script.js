@@ -1,7 +1,10 @@
 // Подключение функционала "Чертоги Фрилансера"
-import { bodyLockToggle, bodyUnlock, debounce, isMobile } from "./functions.js";
+import stickySidebar from "sticky-sidebar";
+import { bodyLockToggle, bodyUnlock, debounce, getRandomString, isMobile } from "./functions.js";
 // Подключение списка активных модулей
 import { mhzModules } from "./modules.js";
+import PincodeInput from 'pincode-input'
+// import 'pincode-input/dist/pincode-input.min.css'
 
 document.addEventListener('DOMContentLoaded', () => {
   const headerSearch = document.querySelector('[data-header-search]');
@@ -14,14 +17,34 @@ document.addEventListener('DOMContentLoaded', () => {
     headerCatalogActions(headerCatalog);
   }
 
+  const pininputs = document.querySelectorAll('[class*="__pininput"]');
+  if (pininputs.length) {
+    pininputsInit(pininputs)
+  }
+
   setMaxHeight('.categories__slide span');
+  setMaxHeight('.chapters__item span');
   setMaxHeight('.product-slide__name', '.productslider');
+
+  if (document.querySelector('[data-filters]')) {
+    setFiltersPosition(document.querySelector('[data-filters]'))
+  }
 })
 
 document.addEventListener('click', (e) => {
   if (e.target.closest('[data-header-catalog-btn]')) {
     document.documentElement.classList.toggle('catalog-open');
     bodyLockToggle();
+  }
+  if (e.target.closest('[data-filter-button]')) {
+    document.documentElement.classList.toggle('filters-open');
+    bodyLockToggle(10);
+    if (!document.querySelector('.filters-productlisting__backdrop')) {
+      const div = document.createElement('div');
+      div.classList.add('filters-productlisting__backdrop');
+      div.setAttribute('data-filter-button', '');
+      document.body.appendChild(div);
+    }
   }
 
   if (e.target.closest('.menu-top-header__link')) {
@@ -58,12 +81,18 @@ document.addEventListener('click', (e) => {
 })
 
 window.addEventListener('scroll', (e) => {
-  document.body.style.setProperty('--scrollY', `${window.scrollY}px`)
+  document.body.style.setProperty('--scrollY', `${window.scrollY}px`);
 })
 
 window.addEventListener('resize', () => {
   setMaxHeight('.categories__slide span');
   setMaxHeight('.product-slide__name', '.productslider');
+})
+
+document.addEventListener('formSent', (e) => {
+  const { form } = e.detail;
+
+  if (form.closest('#phoneAuthPopup')) mhzModules.popup.open('#phonePinPopup')
 })
 
 
@@ -185,3 +214,25 @@ function setMinHeight(selector, parentSelector) {
     els.forEach(el => el.style.setProperty('--max-height', `${max}px`));
   })
 }
+
+function pininputsInit(pininputs) {
+  pininputs.forEach(pininput => {
+    const className = `pininput_${getRandomString(16)}`;
+    pininput.classList.add(className)
+    pininput.pininput = new PincodeInput(`.${className}`, {
+      count: 4,
+      secure: false,
+    })
+  })
+}
+
+function setFiltersPosition(filtersEl) {
+  const sidebar = new stickySidebar(filtersEl, {
+    innerWrapperSelector: '.filters-productlisting__body',
+    bottomSpacing: 30,
+    topSpacing: 30,
+    minWidth: 992
+  })
+}
+
+window.mhzModules = mhzModules;

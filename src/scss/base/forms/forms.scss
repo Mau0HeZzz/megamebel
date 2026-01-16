@@ -1,53 +1,36 @@
-//<FORM>
-// Сниппет (HTML):
-.form {
-	&__row {
-	}
-	&__column {
-	}
-	&__line {
-	}
-	&__input {
-	}
-	&__button {
-	}
-	&__error {
-	}
-}
-//</FORM>
 
 // <BUTTONS>
 // Сниппет (HTML): btn
-// @import "button";
+// @use "button";
 
 // <INPUTS>
 // Сниппет (HTML): inp
-// @import "input";
+// @use "input";
 
 // <CHECK>
 // Сниппет (HTML): chk
-// @import "checkbox";
+// @use "checkbox";
 
 // <RADIO>
 // Сниппет (HTML): opt
-// @import "radio";
+// @use "radio";
 
 // <SELECT>
 // Сниппет (HTML): sel
-// @import "select";
+@use "select";
 
 // <RATING>
 // Сниппет (HTML): rating
-// @import "rating";
+// @use "rating";
 
 // <QUANTITY>
 // Сниппет (HTML): qa
-// @import "quantity";
+// @use "quantity";
 
 // <RANGE>
 // Сниппет (HTML):
-// @import "range";
+// @use "range";
 
 // <CALENDAR>
 // Сниппет (HTML):
-// @import "datepicker";
+// @use "datepicker";

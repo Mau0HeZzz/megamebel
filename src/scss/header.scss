@@ -455,6 +455,7 @@
     min-width: mixins.toRem(400);
     padding: mixins.toRem(20);
     border-radius: mixins.toRem(15);
+    z-index: 2;
 
     max-height: calc(100dvh - var(--headerHeight));
     overflow: clip auto;
@@ -1015,6 +1016,7 @@
 
 .catalog-header {
   background-color: var(--white-color);
+  z-index: 2;
   .loaded & {
     transition: opacity 0.3s ease 0s;
   }

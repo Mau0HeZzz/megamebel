@@ -87,7 +87,16 @@ export let formValidate = {
 	},
 	validateInput(formRequiredItem) {
 		let error = 0;
-		if (formRequiredItem.dataset.required === "email") {
+    if (formRequiredItem.pininput) {
+      const value = formRequiredItem.pininput.value;
+      const count = formRequiredItem.pininput.count;
+      if (value.length < count) {
+        this.addError(formRequiredItem);
+        error++;
+      } else {
+				this.removeError(formRequiredItem);
+			}
+    } else if (formRequiredItem.dataset.required === "email") {
       if (!formRequiredItem.inputmask) {
         formRequiredItem.value = formRequiredItem.value.replace(" ", "");
       }
@@ -126,7 +135,7 @@ export let formValidate = {
           this.removeError(e, errorText);
         })
 			}
-		}  else if (formRequiredItem.type === "checkbox" && !formRequiredItem.checked) {
+		} else if (formRequiredItem.type === "checkbox" && !formRequiredItem.checked) {
 			this.addError(formRequiredItem);
 			error++;
 		} else if (formRequiredItem.type === "radio") {
@@ -150,21 +159,31 @@ export let formValidate = {
 		return error;
 	},
 	addError(formRequiredItem, errorTextArg) {
-		formRequiredItem.classList.add('_form-error');
-		formRequiredItem.parentElement.classList.add('_form-error');
 		let inputError = formRequiredItem.parentElement.querySelector('.form__error');
 		if (inputError) formRequiredItem.parentElement.removeChild(inputError);
     let errorText = errorTextArg || formRequiredItem.dataset.error;
 		if (errorText&&errorText.trim) {
 			formRequiredItem.parentElement.insertAdjacentHTML('beforeend', `<div class="form__error">${errorText}</div>`);
 		}
+    setTimeout(() => {
+      formRequiredItem.classList.add('_form-error');
+      formRequiredItem.parentElement.classList.add('_form-error');
+    }, 0);
 	},
 	removeError(formRequiredItem) {
 		formRequiredItem.classList.remove('_form-error');
 		formRequiredItem.parentElement.classList.remove('_form-error');
-		if (formRequiredItem.parentElement.querySelector('.form__error')) {
-			formRequiredItem.parentElement.removeChild(formRequiredItem.parentElement.querySelector('.form__error'));
+    const parentError = formRequiredItem.parentElement.querySelector('.form__error');
+		if (parentError) {
+      formRequiredItem.parentElement.removeChild(parentError);
 		}
+    if (formRequiredItem.closest('[class*="pininput"]')) {
+      formRequiredItem.parentElement.parentElement.classList.remove('_form-error');
+      const parentParentError = formRequiredItem.parentElement.parentElement.querySelector('.form__error');
+      if (parentParentError) {
+        formRequiredItem.parentElement.parentElement.removeChild(parentParentError);
+      }
+    }
 	},
 	formClean(form) {
     if (form.tagName === 'FORM') {
@@ -217,7 +236,7 @@ export let formValidate = {
       let answer = false;
       let pass = passwordRequireds[0].value;
       if (!pass.trim()) {
-        return true;
+        return passwordRequireds[0].dataset.error || '';
       }
       for (let index = 0; index < passwordRequireds.length; index++) {
         const element = passwordRequireds[index];
@@ -258,7 +277,8 @@ export function formSubmit() {
 		}
 	}
 	async function formSubmitAction(form, e) {
-		const error = !form.hasAttribute('data-no-validate') ? formValidate.getErrors(form) : 0;
+    const error = !form.hasAttribute('data-no-validate') ? formValidate.getErrors(form) : 0;
+    console.log('formSubmitAction', error);
 		if (error === 0) {
 			const ajax = form.hasAttribute('data-ajax');
 			if (ajax) { // Если режим ajax
@@ -346,7 +366,9 @@ export function formSubmit() {
     if (!mhzModules.popup) return;
 
 		const popup = form.dataset.popupSuccess;
-    popup ? await mhzModules.popup.open(popup) : null;
+    if (!popup) return;
+
+    await mhzModules.popup.open(popup);
     
     let timeout = Number(form.dataset.timeout);
 
@@ -362,7 +384,8 @@ export function formSubmit() {
     if (!mhzModules.popup) return;
 
     const popup = form.dataset.popupError;
-    popup ? await mhzModules.popup.open(popup) : null;
+    if (!popup) return;
+    await mhzModules.popup.open(popup);
     
     let timeout = Number(form.dataset.timeout);
 

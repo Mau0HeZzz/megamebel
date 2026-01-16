@@ -56,21 +56,29 @@ function rangeSliderCreate(rangeSliderEl) {
     step: 1,
     range: {
       'min': min,
+      '50%': max / 2,
       'max': max
     },
+    pips: {
+      mode: 'range',
+      stepped: true,
+      density: 5
+    }
   });
   
   rangeSlider.on('update', (a, b, c, d)=>{
     if (updateCounter >= 2) {
       if (b == 0) {
         if (minInput) {
-          minInput.value = Math.round(c[0])
+          const postfix = minInput.dataset.postfix || '';
+          minInput.value = `${Math.round(c[0]).toLocaleString('ru-RU')} ${postfix}`
           setRangeEvent(minInput);
         }
       }
       if (b == 1) {
         if (maxInput) {
-          maxInput.value = Math.round(c[1])
+          const postfix = maxInput.dataset.postfix || '';
+          maxInput.value = `${Math.round(c[1]).toLocaleString('ru-RU')} ${postfix}`
           setRangeEvent(maxInput);
         }
       }

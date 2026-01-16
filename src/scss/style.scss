@@ -115,6 +115,7 @@ body {
 
 // Подключение стилей общих элементов проекта
 @include meta.load-css("common");
+@include meta.load-css("popups");
 
 // Подключение стилей отдельных блоков
 @include meta.load-css("header");
@@ -122,3 +123,4 @@ body {
 
 // Подключение стилей отдельных страниц
 @include meta.load-css("home");
+@include meta.load-css("listing");

@@ -67,6 +67,7 @@ body::after {
 
   &__content {
     // visibility: hidden;
+    --bg: var(--white-color);
     background-color: var(--bg);
     border-radius: mixins.toRem(20);
     padding-top: mixins.toRem(30);
@@ -128,6 +129,10 @@ body::after {
 
   &__close {
     outline: none;
+    position: absolute;
+    top: mixins.toRem(24);
+    right: mixins.toRem(24);
+
     &.btn {
       --btncolor: var(--mainColor);
       position: absolute;
@@ -140,13 +145,10 @@ body::after {
         --btnbdclr: var(--bg);
       }
     }
-    @media (min-width:mixins.toEm(variables.$mobile)){
-      top: 0;
-      left: calc(100% + mixins.toRem(20));
-    }
-    @media (max-width:mixins.toEm(variables.$mobile)){
-      top: 0;
-      right: 0;
+
+    @media (width < #{mixins.toEm(variables.$mobile)}){
+      top: mixins.toRem(15);
+      right: mixins.toRem(15);
     }
   }
 
@@ -163,7 +165,7 @@ body::after {
       width: 30%;
       height: mixins.toRem(5);
       border-radius: mixins.toRem(9999);
-      background-color: rgba(0, 0, 0, 0.5);
+      background-color: var(--grey-light-color);
       top: 50%;
       left: 50%;
       translate: -50% -50%;
