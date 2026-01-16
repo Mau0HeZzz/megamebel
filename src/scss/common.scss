@@ -809,7 +809,7 @@ summary {
     @include mixins.adaptiveValue("--sz", 50, 44, 1920, 360, 2);
 
     @media (width < #{mixins.toEm(360)}){
-      --sz: #{mixins.vw(40,360)}
+      --sz: #{mixins.vw(40,360)};
     }
 
     .loaded & {
