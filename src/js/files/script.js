@@ -25,10 +25,6 @@ document.addEventListener('DOMContentLoaded', () => {
   setMaxHeight('.categories__slide span');
   setMaxHeight('.chapters__item span');
   setMaxHeight('.product-slide__name', '.productslider');
-
-  if (document.querySelector('[data-filters]')) {
-    setFiltersPosition(document.querySelector('[data-filters]'))
-  }
 })
 
 document.addEventListener('click', (e) => {
@@ -93,6 +89,22 @@ document.addEventListener('formSent', (e) => {
   const { form } = e.detail;
 
   if (form.closest('#phoneAuthPopup')) mhzModules.popup.open('#phonePinPopup')
+})
+
+window.addEventListener('load', () => {
+  if (document.querySelector('[data-filters]')) {
+    setFiltersPosition(document.querySelector('[data-filters]'))
+  }
+
+  if (document.querySelector('.sidebar-productfull')) {
+    const sidebar = new stickySidebar(document.querySelector('.sidebar-productfull'), {
+      innerWrapperSelector: '.sidebar-productfull__inner',
+      containerSelector: '.productfull__container',
+      bottomSpacing: 30,
+      topSpacing: 30,
+      minWidth: 992
+    })
+  }
 })
 
 

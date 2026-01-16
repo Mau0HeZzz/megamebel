@@ -1,7 +1,7 @@
 // imageOptimizerConfig.js
 export const DEFAULT_OPTIONS = {
-  dir: '../public/img',
-  outDir: '../dist/img',
+  dir: '../public/local/templates/megamebel/img',
+  outDir: '../dist/local/templates/megamebel/img',
   test: /\.(jpe?g|png|gif|tiff|webp|svg|avif)$/i,
   exclude: undefined,
   include: undefined,

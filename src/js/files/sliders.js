@@ -107,6 +107,63 @@ function initSliders() {
       splide.mount();
     }
   }
+  if (document.querySelector('.main-productfull__mainslider')) {
+    let mainslider, thumbslider;
+
+    mainslider = new Splide('.main-productfull__mainslider', {
+      type: 'slide',
+      pagination: false,
+      gap: 10,
+      perMove: 1,
+      perPage: 1,
+      arrows: false,
+    })
+    
+
+    if (document.querySelector('.main-productfull__thumbslider')) {
+      thumbslider = new Splide('.main-productfull__thumbslider', {
+        type: 'slide',
+        pagination: false,
+        arrows: false,
+        rewind: true,
+        autoWidth: true,
+        gap: 15,
+        isNavigation: true,
+        breakpoints: {
+          992: {
+            direction: 'ttb',
+            height: '74'
+          },
+          767: {
+            direction: 'ltr',
+          }
+        }
+      })
+    }
+
+    if (thumbslider) mainslider.sync(thumbslider)
+      
+    mainslider.mount();
+    if (thumbslider) thumbslider.mount();
+  }
+  if (document.querySelector('.main-productfull__miniphoto')) {
+    let splide = new Splide('.main-productfull__miniphoto', {
+      type: 'slide',
+      pagination: false,
+      gap: 15,
+      perMove: 1,
+      perPage: 4,
+      arrows: true,
+      breakpoints: {
+        767: {
+          perPage: 3,
+          gap: 10
+        }
+      }
+    })
+    
+    splide.mount();
+  }
 }
 
 

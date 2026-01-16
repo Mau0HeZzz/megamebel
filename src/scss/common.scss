@@ -849,3 +849,29 @@ summary {
     }
   }
 }
+
+ul li {
+  list-style: none;
+}
+
+._content {
+  line-height: 1.4;
+
+  ul {
+    padding-left: mixins.toRem(17);
+
+    li {
+      list-style: initial;
+
+      &:not(:last-child) {margin-bottom: mixins.toRem(5);}
+
+      &::marker {
+        color: var(--accent-color);
+      }
+    }
+  }
+
+  p {
+    &:not(:last-child) {margin-bottom: mixins.toRem(10);}
+  }
+}

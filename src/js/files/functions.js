@@ -499,11 +499,12 @@ export function showMore() {
 			const rowGap = parseFloat(getComputedStyle(showMoreContent).rowGap) ? parseFloat(getComputedStyle(showMoreContent).rowGap) : 0;
 			if (showMoreType === 'items') {
 				let showMoreTypeValue = getShowMoreTypeValueItems(showMoreContent);
-        console.log(showMoreTypeValue);
 
 				const showMoreItems = showMoreContent.children;
+        if (showMoreItems.length <= showMoreTypeValue) return Infinity;
+
 				for (let index = 1; index < showMoreItems.length; index++) {
-					const showMoreItem = showMoreItems[index - 1];
+          const showMoreItem = showMoreItems[index - 1];
 					const marginTop = parseFloat(getComputedStyle(showMoreItem).marginTop) ? parseFloat(getComputedStyle(showMoreItem).marginTop) : 0;
 					const marginBottom = parseFloat(getComputedStyle(showMoreItem).marginBottom) ? parseFloat(getComputedStyle(showMoreItem).marginBottom) : 0;
 					hiddenHeight += showMoreItem.offsetHeight + marginTop;
@@ -529,7 +530,7 @@ export function showMore() {
 
       columns = Math.max(columnCount, gtc);
       let showMoreTypeValue = (showMoreContent.dataset.showmoreContent ? showMoreContent.dataset.showmoreContent : 3);
-      let showMoreContentMedias = showMoreContent.getAttribute('data-showmore-content-media').split('||');
+      let showMoreContentMedias = showMoreContent.getAttribute('data-showmore-content-media')?.split('||') || [];
       
       if (!showMoreContentMedias.length) return showMoreTypeValue / columns;
 

@@ -124,3 +124,4 @@ body {
 // Подключение стилей отдельных страниц
 @include meta.load-css("home");
 @include meta.load-css("listing");
+@include meta.load-css("product");

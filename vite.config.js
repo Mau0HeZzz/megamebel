@@ -106,7 +106,7 @@ export default defineConfig({
         families: [{
           name: 'Noto Sans',
           local: 'Noto Sans',
-          src: './public/fonts/*',
+          src: './public/local/templates/megamebel/fonts/*',
           transform: fontTransformer
         }],
         display: 'swap',
