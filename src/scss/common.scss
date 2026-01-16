@@ -385,6 +385,7 @@ img {
     text-align: center;
     padding: mixins.toRem(8) mixins.toRem(6);
     border-radius: mixins.toRem(15);
+    font-weight: 600;
 
     @include mixins.adaptiveValue("height", 50, 46, 1280, 480);
 
