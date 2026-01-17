@@ -473,7 +473,7 @@ img {
       &:not(:last-child) {margin-bottom: mixins.toRem(4);}
     }
 
-    input {
+    input, textarea {
       border: mixins.toRem(1) solid var(--stroke-color);
       border-radius: mixins.toRem(15);
       padding: mixins.toRem(13) mixins.toRem(20);
@@ -486,6 +486,11 @@ img {
       &._form-error {
         border-color: var(--red-color);
       }
+    }
+
+    textarea {
+      resize: horizontal;
+      min-height: mixins.toRem(165);
     }
   }
 
@@ -582,11 +587,12 @@ img {
           border-left: mixins.toRem(2) solid var(--white-color);
           border-bottom: mixins.toRem(2) solid var(--white-color);
           rotate: -45deg;
+          translate: 0 mixins.toRem(-1);
         }
       }
     }
 
-    i {
+    &>i {
       width: mixins.toRem(16);
       height: mixins.toRem(16);
       border: mixins.toRem(1) solid var(--stroke-color);
@@ -726,12 +732,24 @@ img {
   }
 
   &__container {
+    display: flex;
+    align-items: flex-end;
+    gap: mixins.toRem(10);
   }
 
   &__title {
     font-weight: 500;
     line-height: 1.2;
     @include mixins.adaptiveValue("font-size", 35, 24, 1280, 480);
+  }
+
+  &__subtitle {
+    font-weight: 500;
+    line-height: 1.2;
+    color: var(--grey-color);
+    margin-bottom: 0.3%;
+
+    @include mixins.adaptiveValue("font-size", 16, 13, 767, 480);
   }
 }
 

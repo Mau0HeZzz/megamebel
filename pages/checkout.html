@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+	<load
+		src="src/html/_head.html"
+		title="Корзина"
+	/>
+	<body>
+		<div class="wrapper">
+      <load src="src/html/_header.html"/>
+			<main class="page">
+        <div class="breadcrumbs">
+          <div class="breadcrumbs__container">
+            <ul class="breadcrumbs__list">
+              <li class="breadcrumbs__item">
+                <a href="#">
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M6.31665 7.00138L9.20403 9.88871L8.37908 10.7137L4.66675 7.00138L8.37908 3.28906L9.20403 4.11402L6.31665 7.00138Z" fill="#666666"/>
+                  </svg>
+                  <span>Главная</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="pagehead">
+          <div class="pagehead__container">
+            <h1 class="pagehead__title">Оформление заказа</h1>
+            <p class="pagehead__subtitle">3 товара</p>
+          </div>
+        </div>
+        <section class="cartfull">
+          <div class="cartfull__container">
+            <form action="#" class="cartfull__checkout checkout-cartfull" id="checkout-cartfull">
+              <div class="checkout-cartfull__item">
+                <div class="checkout-cartfull__itemtitle">Укажите данные получателя</div>
+                <div class="checkout-cartfull__form form">
+                  <div class="checkout-cartfull__row">
+                    <label class="form__item">
+                      <span>Имя</span>
+                      <input 
+                        type="text" 
+                        data-required
+                        placeholder="Имя"
+                      >
+                    </label>
+                  </div>
+                  <div class="checkout-cartfull__row">
+                    <label class="form__item">
+                      <span>Телефон</span>
+                      <input 
+                        type="text" 
+                        data-required="phone"
+                        data-inputmask="'mask':'+7 (999) 999-99-99'"
+                        placeholder="Телефон"
+                      >
+                    </label>
+                    <label class="form__item">
+                      <span>Email</span>
+                      <input 
+                        type="text" 
+                        data-required="email"
+                        data-inputmask="'alias':'email'"
+                        placeholder="Email"
+                      >
+                    </label>
+                  </div>
+                  <div class="checkout-cartfull__row">
+                    <label class="form__item">
+                      <span>Адрес</span>
+                      <input 
+                        type="text" 
+                        data-required
+                        data-error="Укажите адрес доставки"
+                        placeholder="Адрес"
+                      >
+                    </label>
+                  </div>
+                  <div class="checkout-cartfull__row">
+                    <div class="checkout-cartfull__box form__boxwrap">
+                      <input type="checkbox" checked>
+                      <i></i>
+                      <span>Согласен на обработку персональных данных политика конфиденциальности</span>
+                    </div>
+                  </div>
+                  <div class="checkout-cartfull__row">
+                    <div class="form__item">
+                      <span>Примечание к заказу</span>
+                      <textarea placeholder="Например: удобное время доставки, как лучше к вам проехать, второй номер телефона, код от домофона"></textarea>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="checkout-cartfull__item">
+                <div class="checkout-cartfull__itemtitle">Выберите способ оплаты</div>
+                <label class="checkout-cartfull__paybox form__boxwrap">
+                  <input type="radio" name="pay_method" data-required>
+                  <i></i>
+                  <div>
+                    <i><img src="/local/templates/megamebel/img/cart/pay_1.svg" alt="Image"></i>
+                    <div><span>Наличный расчет</span></div>
+                  </div>
+                </label>
+                <label class="checkout-cartfull__paybox form__boxwrap">
+                  <input type="radio" name="pay_method" data-required>
+                  <i></i>
+                  <div>
+                    <i><img src="/local/templates/megamebel/img/cart/pay_2.svg" alt="Image"></i>
+                    <div><span>Оплата картой и СБП</span></div>
+                  </div>
+                </label>
+                <label class="checkout-cartfull__paybox form__boxwrap">
+                  <input type="radio" name="pay_method" data-required>
+                  <i></i>
+                  <div>
+                    <i><img src="/local/templates/megamebel/img/cart/pay_3.png" alt="Image"></i>
+                    <div>
+                      <span>Рассрочка от СберБанка</span>
+                      <p>от 1 768 ₽/мес</p>
+                    </div>
+                  </div>
+                </label>
+              </div>
+            </form>
+            <div class="cartfull__sidebar">
+              <div 
+                class="sidebar-cartfull" 
+                data-spollers 
+                data-da=".checkout-cartfull, 991, last"
+                data-watch
+                data-watch-threshold="0.2"
+              >
+                <div class="sidebar-cartfull__title">Сумма заказа</div>
+                <div class="sidebar-cartfull__prods">
+                  <div class="sidebar-cartfull__prod prod-cartfull">
+                    <div class="prod-cartfull__image"><img src="/local/templates/megamebel/img/cart/product_1.png" alt=""></div>
+                    <div class="prod-cartfull__head">
+                      <div class="prod-cartfull__name">Шкаф-купе Боско-1</div>
+                      <button class="prod-cartfull__del">
+                        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M12.75 4.5H16.5V6H15V15.75C15 16.1642 14.6642 16.5 14.25 16.5H3.75C3.33579 16.5 3 16.1642 3 15.75V6H1.5V4.5H5.25V2.25C5.25 1.83579 5.58579 1.5 6 1.5H12C12.4142 1.5 12.75 1.83579 12.75 2.25V4.5ZM13.5 6H4.5V15H13.5V6ZM10.0606 10.4998L11.3865 11.8256L10.3258 12.8863L9 11.5604L7.67415 12.8863L6.61351 11.8256L7.93935 10.4998L6.61351 9.174L7.67415 8.11335L9 9.43912L10.3258 8.11335L11.3865 9.174L10.0606 10.4998ZM6.75 3V4.5H11.25V3H6.75Z" fill="#666666"/>
+                        </svg>
+                      </button>
+                    </div>
+                    <div class="prod-cartfull__quantity quantity" data-quantity>
+                      <button type="button" class="quantity__button quantity__button_minus"></button>
+                      <div class="quantity__input">
+                        <input autocomplete="off" type="text" value="1">
+                      </div>
+                      <button type="button" class="quantity__button quantity__button_plus"></button>
+                    </div>
+                    <ul class="prod-cartfull__mods">
+                      <li>ВxШхГ -  98x1694x1668</li>
+                      <li>Ручка торцевая белая</li>
+                      <li>Цвет корпуса Боб Пайн</li>
+                    </ul>
+                    <div class="prod-cartfull__prices">
+                      <div class="prod-cartfull__price">36 750 ₽</div>
+                      <div class="prod-cartfull__oldprice">47 200 ₽</div>
+                    </div>
+                  </div>
+                  <div class="sidebar-cartfull__prod prod-cartfull">
+                    <div class="prod-cartfull__image"><img src="/local/templates/megamebel/img/cart/product_2.png" alt=""></div>
+                    <div class="prod-cartfull__head">
+                      <div class="prod-cartfull__name">Книжный Карлос - 010 Дуб сонома</div>
+                      <button class="prod-cartfull__del">
+                        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M12.75 4.5H16.5V6H15V15.75C15 16.1642 14.6642 16.5 14.25 16.5H3.75C3.33579 16.5 3 16.1642 3 15.75V6H1.5V4.5H5.25V2.25C5.25 1.83579 5.58579 1.5 6 1.5H12C12.4142 1.5 12.75 1.83579 12.75 2.25V4.5ZM13.5 6H4.5V15H13.5V6ZM10.0606 10.4998L11.3865 11.8256L10.3258 12.8863L9 11.5604L7.67415 12.8863L6.61351 11.8256L7.93935 10.4998L6.61351 9.174L7.67415 8.11335L9 9.43912L10.3258 8.11335L11.3865 9.174L10.0606 10.4998ZM6.75 3V4.5H11.25V3H6.75Z" fill="#666666"/>
+                        </svg>
+                      </button>
+                    </div>
+                    <div class="prod-cartfull__quantity quantity" data-quantity>
+                      <button type="button" class="quantity__button quantity__button_minus"></button>
+                      <div class="quantity__input">
+                        <input autocomplete="off" type="text" value="1">
+                      </div>
+                      <button type="button" class="quantity__button quantity__button_plus"></button>
+                    </div>
+                    <div class="prod-cartfull__prices">
+                      <div class="prod-cartfull__price">16 200 ₽</div>
+                    </div>
+                  </div>
+                  <div class="sidebar-cartfull__prod prod-cartfull">
+                    <div class="prod-cartfull__image"><img src="/local/templates/megamebel/img/cart/product_3.png" alt=""></div>
+                    <div class="prod-cartfull__head">
+                      <div class="prod-cartfull__name">Тумба прикроватная Дори Белый</div>
+                      <button class="prod-cartfull__del">
+                        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M12.75 4.5H16.5V6H15V15.75C15 16.1642 14.6642 16.5 14.25 16.5H3.75C3.33579 16.5 3 16.1642 3 15.75V6H1.5V4.5H5.25V2.25C5.25 1.83579 5.58579 1.5 6 1.5H12C12.4142 1.5 12.75 1.83579 12.75 2.25V4.5ZM13.5 6H4.5V15H13.5V6ZM10.0606 10.4998L11.3865 11.8256L10.3258 12.8863L9 11.5604L7.67415 12.8863L6.61351 11.8256L7.93935 10.4998L6.61351 9.174L7.67415 8.11335L9 9.43912L10.3258 8.11335L11.3865 9.174L10.0606 10.4998ZM6.75 3V4.5H11.25V3H6.75Z" fill="#666666"/>
+                        </svg>
+                      </button>
+                    </div>
+                    <div class="prod-cartfull__quantity quantity" data-quantity>
+                      <button type="button" class="quantity__button quantity__button_minus"></button>
+                      <div class="quantity__input">
+                        <input autocomplete="off" type="text" value="1">
+                      </div>
+                      <button type="button" class="quantity__button quantity__button_plus"></button>
+                    </div>
+                    <div class="prod-cartfull__prices">
+                      <div class="prod-cartfull__price">11 200 ₽</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="sidebar-cartfull__list">
+                  <div class="sidebar-cartfull__listitem">
+                    <span>Товары, 3 шт</span>
+                    <p>91 329 ₽</p>
+                  </div>
+                  <details class="sidebar-cartfull__spoller" data-open>
+                    <summary class="sidebar-cartfull__listitem _green">
+                      <span>Выгода</span>
+                      <p>-1 000 ₽</p>
+                    </summary>
+                    <div class="sidebar-cartfull__spollerbody">
+                      <div class="sidebar-cartfull__listitem">
+                        <span>Скидка по акции</span>
+                        <p>-1 000 ₽</p>
+                      </div>
+                      <div class="sidebar-cartfull__listitem">
+                        <span>Скидка по промокоду</span>
+                        <p>-2 000 ₽</p>
+                      </div>
+                    </div>
+                  </details>
+                </div>
+                <div class="sidebar-cartfull__dops">
+                  <label class="sidebar-cartfull__box form__boxwrap">
+                    <input type="checkbox">
+                    <i></i>
+                    <span>Подъём — от 100 ₽ за этаж</span>
+                    <p>(уточняйте стоимость по телефону)</p>
+                  </label>
+                  <label class="sidebar-cartfull__box form__boxwrap">
+                    <input type="checkbox" checked>
+                    <i></i>
+                    <span>Сборка — от 1 000 ₽</span>
+                    <p>(уточняйте стоимость по телефону)</p>
+                  </label>
+                </div>
+                <div class="sidebar-cartfull__total">
+                  <span>Сумма</span>
+                  <span>89 329 ₽</span>
+                </div>
+                <button class="sidebar-cartfull__submit" type="submit" form="checkout-cartfull">Перейти к офрмлению</button>
+              </div>
+            </div>
+          </div>
+        </section>
+			</main>
+      <load src="src/html/_footer.html"/>
+		</div>
+    <load src="src/html/_popups.html"/>
+    <load src="src/html/_js.html"/>
+	</body>
+</html>

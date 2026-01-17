@@ -25,6 +25,11 @@ document.addEventListener('DOMContentLoaded', () => {
   setMaxHeight('.categories__slide span');
   setMaxHeight('.chapters__item span');
   setMaxHeight('.product-slide__name', '.productslider');
+
+  const cartFull = document.querySelector('[data-full-cart]');
+  if (cartFull) {
+    mhzFullCartActions(cartFull)
+  }
 })
 
 document.addEventListener('click', (e) => {
@@ -104,6 +109,17 @@ window.addEventListener('load', () => {
       topSpacing: 30,
       minWidth: 992
     })
+  }
+})
+
+document.addEventListener('watcherCallback', (e) => {
+  const { target, isIntersecting } = e.detail.entry;
+
+  if (target.closest('.sidebar-cartfull')) {
+    const cartFixed = document.querySelector('.cartfull__fixed');
+    if (!cartFixed) return;
+
+    isIntersecting ? cartFixed.classList.add('_hide') : cartFixed.classList.remove('_hide')
   }
 })
 
@@ -244,6 +260,32 @@ function setFiltersPosition(filtersEl) {
     bottomSpacing: 30,
     topSpacing: 30,
     minWidth: 992
+  })
+}
+
+function mhzFullCartActions(cartFull) {
+  const oneCheckboxes = cartFull?.querySelectorAll('[data-full-cart-checkone]');
+  const allCheckbox = cartFull?.querySelector('[data-full-cart-checkall]');
+
+  if (!oneCheckboxes?.length || !allCheckbox) return
+
+  allCheckbox.addEventListener('change', () => {
+    oneCheckboxes.forEach(oneCheckbox => oneCheckbox.checked = allCheckbox.checked)
+  })
+
+  cartFull.addEventListener('change', (e) => {
+    const array = [...oneCheckboxes];
+    if (!array.includes(e.target)) return;
+
+    for (let index = 0; index < array.length; index++) {
+      const oneCheckbox = array[index];
+      if (!oneCheckbox.checked) {
+        allCheckbox.checked = false;
+        return
+      }
+    }
+
+    allCheckbox.checked = true;
   })
 }
 
