@@ -556,6 +556,7 @@ class MhzComparsion {
           if (!itm.hidden) continue;
           this.hideItem(item);
           this.showItem(itm);
+          break;
         }
         break;
       case 'next':
@@ -564,6 +565,7 @@ class MhzComparsion {
           if (!itm.hidden) continue;
           this.hideItem(item);
           this.showItem(itm);
+          break;
         }
         break;
     }
