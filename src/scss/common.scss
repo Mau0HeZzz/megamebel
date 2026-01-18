@@ -292,6 +292,34 @@ img {
     flex-direction: column;
     flex: 1 1 auto;
     @include mixins.adaptiveValue("gap", 15, 12, 1280, 767);
+
+    &:has(.product-slide__arrow:not([hidden])) {
+      position: relative;
+
+      .product-slide__chapter,
+      .product-slide__name {
+        padding-left: mixins.toRem(28);
+        padding-right: mixins.toRem(28);
+      }
+    }
+  }
+
+  &__arrow {
+    position: absolute;
+    top: mixins.toRem(24);
+    width: mixins.toRem(24);
+    height: mixins.toRem(24);
+    display: flex;
+    justify-content:center;align-items: center;
+    z-index: 2;
+    cursor: pointer;
+
+    &_prev {
+      left: 0;
+    }
+    &_next {
+      right: 0;
+    }
   }
 
   &__chapter {

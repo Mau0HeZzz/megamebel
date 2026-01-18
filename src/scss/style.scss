@@ -62,6 +62,11 @@ body {
 // Например header__container, main__container і т.п.
 // Сниппет (HTML): cnt
 
+:root {
+  @include mixins.adaptiveValue("--padding-left", math.div(variables.$containerPadding, 2), 10, 1280, 992);
+  @include mixins.adaptiveValue("--padding-right", math.div(variables.$containerPadding, 2), 10, 1280, 992);
+}
+
 @if (variables.$responsiveType==1) {
 	// Отзывчивая
 	[class*="__container"] {
@@ -72,9 +77,6 @@ body {
 		@if (variables.$containerPadding>0) {
       padding-left: var(--padding-left);
       padding-right: var(--padding-right);
-
-      @include mixins.adaptiveValue("--padding-left", math.div(variables.$containerPadding, 2), 10, 1280, 992);
-      @include mixins.adaptiveValue("--padding-right", math.div(variables.$containerPadding, 2), 10, 1280, 992);
 		}
 	}
 } @else {
@@ -126,3 +128,4 @@ body {
 @include meta.load-css("listing");
 @include meta.load-css("product");
 @include meta.load-css("cart");
+@include meta.load-css("comparsion");

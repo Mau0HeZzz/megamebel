@@ -1,0 +1,367 @@
+@use "sass:math";
+@use "/src/scss/base/mixins.scss";
+@use "/src/scss/variables.scss";
+
+:root {
+  --comparsion-cols: 4;
+
+  --comparsion-container-width: 0rem;
+  --comparsion-width-without-container: 0rem;
+
+  --comparsion-width-without-container-half: calc(var(--comparsion-width-without-container) / 2);
+  --comparsion-without-paddings: calc(100vw - var(--padding-left) - var(--padding-right));
+  --comparsion-cnt-width: calc(var(--comparsion-without-paddings) - var(--comparsion-width-without-container-half));
+  --comparsion-minus: calc((var(--comparsion-gap) * (var(--comparsion-cols) - 1)) / var(--comparsion-cols));
+  --comparsion-col-width: calc((var(--comparsion-cnt-width) / var(--comparsion-cols)) - var(--comparsion-minus, 0px));
+  
+  @include mixins.adaptiveValue("--comparsion-gap", 20, 14, 480, 360);
+
+  @media (width >= #{mixins.toEm(1560)}){
+    --comparsion-container-width: #{mixins.toRem(1280)};
+    --comparsion-width-without-container: calc(100vw - var(--comparsion-container-width));
+  }
+  
+  @media (width < #{mixins.toEm(1280)}){
+    --comparsion-cols: 3;
+  }
+  
+  @media (width < #{mixins.toEm(650)}){
+    --comparsion-cols: 2;
+  }
+}
+
+.comparsion {
+  @include mixins.adaptiveValue("padding-bottom", 120, 60);
+
+  &__container {
+  }
+
+  &__head {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, var(--comparsion-col-width));
+    gap: var(--comparsion-gap);
+    grid-auto-flow: column;
+    &:not(:last-child) {margin-bottom: mixins.toRem(40);}
+  }
+
+  &__item {
+    width: var(--comparsion-col-width);
+  }
+
+  &__add {
+    width: var(--comparsion-col-width);
+    display: flex;
+    flex-direction: column;
+    justify-content:center;align-items: center;
+    text-align: center;
+    border-radius: mixins.toRem(15);
+    border: mixins.toRem(1) solid var(--stroke-color);
+
+    gap: mixins.toRem(24);
+
+    cursor: pointer;
+    color: var(--green-color);
+    font-weight: 600;
+    font-size: mixins.toRem(18);
+
+    .loaded & {
+      transition: all 0.3s ease 0s;
+    }
+
+    @media (any-hover: hover){
+      &:hover{
+        background-color: var(--green-light-color);
+      }
+    }
+
+    i {
+      width: mixins.toRem(70);
+      height: mixins.toRem(70);
+      background-color: var(--green-small-light-color);
+      display: flex;
+      justify-content:center;align-items: center;
+      border-radius: 50%;
+    }
+  }
+
+  &__body {
+  }
+
+  &__flyhead {
+  }
+}
+.body-comparsion {
+
+  &__item {
+    border-bottom: mixins.toRem(1) solid var(--stroke-color);
+    padding-bottom: mixins.toRem(20);
+    &:not(:last-child) {margin-bottom: mixins.toRem(20);}
+  }
+
+  &__title {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    font-weight: 600;
+    line-height: 1.4;
+    @include mixins.adaptiveValue("font-size", 22, 18, 767, 360);
+
+    i {
+      display: flex;
+      justify-content:center;align-items: center;
+      rotate: 180deg;
+
+      .loaded & {
+        transition: all 0.3s ease 0s;
+      }
+    }
+
+    &._spoller-active i {
+      rotate: none;
+    }
+  }
+
+  &__body {
+    padding-top: mixins.toRem(16);
+  }
+
+  &__row {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, var(--comparsion-col-width));
+    column-gap: var(--comparsion-gap);
+    grid-auto-flow: column;
+    grid-template-rows: repeat(2, 1fr);
+    row-gap: mixins.toRem(5);
+    &:not(:last-child) {margin-bottom: mixins.toRem(12);}
+  }
+
+  &__rowtitle {
+    grid-column: 1 / span var(--comparsion-cols);
+    font-weight: 300;
+    line-height: 1.4;
+    opacity: 0.7;
+    @include mixins.adaptiveValue("font-size", 14, 13, 480, 360);
+  }
+
+  &__column {
+    line-height: 1.4;
+    width: var(--comparsion-col-width);
+    @include mixins.adaptiveValue("font-size", 16, 15, 1280, 767);
+  }
+}
+
+.flyhead-comparsion {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: var(--white-color);
+  box-shadow: mixins.toRem(0) mixins.toRem(20) mixins.toRem(25) mixins.toRem(-5) #0000000D, 
+    mixins.toRem(0) mixins.toRem(10) mixins.toRem(10) mixins.toRem(-5) #00000005;
+  z-index: 3;
+
+  .loaded & {
+    transition: all 0.3s ease 0s;
+  }
+
+  &._hide {
+    translate: 0 -120%;
+    pointer-events: none;
+  }
+
+  &__container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, var(--comparsion-col-width));
+    gap: var(--comparsion-gap);
+    grid-auto-flow: column;
+    @include mixins.adaptiveValue("padding-top", 20, 14, 767, 480);
+    @include mixins.adaptiveValue("padding-bottom", 20, 14, 767, 480);
+  }
+
+  &__item {
+    display: grid;
+    gap: mixins.toRem(2) mixins.toRem(13);
+    width: var(--comparsion-col-width);
+    
+    &:has(.flyhead-comparsion__arrow) {
+      position: relative;
+      .flyhead-comparsion__image {
+        grid-row: 1 / span 3;
+      }
+
+      .flyhead-comparsion__chapter,
+      .flyhead-comparsion__name {
+        padding-left: mixins.toRem(28);
+        padding-right: mixins.toRem(28);
+      }
+    }
+    
+    @media (width >= #{mixins.toEm(variables.$mobile)}){
+      grid-template-columns: minmax(1fr, mixins.toRem(88)) 1.5fr;
+    }
+  }
+
+  &__image {
+    aspect-ratio: 88 / 66;
+    grid-row: 1 / span 2;
+    max-width: mixins.toRem(88);
+    border-radius: mixins.toRem(10);
+    overflow: hidden;
+
+    @media (width < #{mixins.toEm(variables.$mobile)}){
+      display: none;
+    }
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+    }
+  }
+
+  &__arrow {
+    position: absolute;
+    top: mixins.toRem(24);
+    cursor: pointer;
+
+    &_next {
+      right: 0;
+    }
+
+    &_prev {
+      @media (width >= #{mixins.toEm(variables.$mobile)}){
+        right: calc(mixins.percent(209,298) - mixins.toRem(24));
+      }
+      @media (width < #{mixins.toEm(variables.$mobile)}){
+        left: 0;
+      }
+    }
+  }
+
+  &__chapter {
+    font-size: mixins.toRem(14);
+    line-height: 1.4;
+    color: var(--grey-color);
+    @media (width >= #{mixins.toEm(variables.$mobile)}){
+      grid-column-start: 2;
+    }
+  }
+
+  &__name {
+    font-weight: 600;
+    line-height: 1.2;
+    @include mixins.adaptiveValue("font-size", 16, 15, 1280, 767);
+    @media (width >= #{mixins.toEm(variables.$mobile)}){
+      grid-column-start: 2;
+    }
+  }
+
+  &__prices {
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+    gap: mixins.toRem(6);
+    @media (width >= #{mixins.toEm(variables.$mobile)}){
+      grid-column: 1 / span 2;
+    }
+  }
+
+  &__price {
+    font-weight: 500;
+
+    @include mixins.adaptiveValue("font-size", 16, 15, 1280, 767);
+
+    &:has(+.flyhead-comparsion__oldprice) {
+      color: var(--red-color);
+    }
+  }
+
+  &__oldprice {
+    font-size: mixins.toRem(12);
+    color: var(--grey-color);
+    text-decoration: line-through;
+  }
+
+  &__actions {
+    display: flex;
+    align-items: flex-end;
+    gap: mixins.toRem(2);
+    margin-top: mixins.toRem(10);
+    @media (width >= #{mixins.toEm(variables.$mobile)}){
+      grid-column: 1 / span 2;
+    }
+  }
+
+  &__button {
+    height: mixins.toRem(40);
+    border-radius: mixins.toRem(15);
+    background-color: var(--accent-color);
+    color: var(--white-color);
+    display: flex;
+    justify-content:center;align-items: center;
+    padding: mixins.toRem(15);
+    font-size: mixins.toRem(14);
+    font-weight: 600;
+    margin-right: mixins.toRem(10);
+    flex: 1 1 auto;
+    .loaded & {
+      transition: all 0.3s ease 0s;
+    }
+
+    @media (any-hover: hover){
+      &:hover{
+        background-color: var(--accent-hover-color);
+      }
+    }
+  }
+
+  &__action {
+    width: mixins.toRem(34);
+    height: mixins.toRem(34);
+    flex: 0 0 mixins.toRem(34);
+    display: flex;
+    justify-content:center;align-items: center;
+
+    &:nth-child(1 of &) {
+      margin-left: auto;
+    }
+  }
+
+  &__add {
+    width: var(--comparsion-col-width);
+    display: flex;
+    flex-direction: column;
+    justify-content:center;align-items: center;
+    gap: mixins.toRem(18);
+    border-radius: mixins.toRem(15);
+    border: mixins.toRem(1) solid var(--stroke-color);
+    font-weight: 600;
+    color: var(--green-color);
+    cursor: pointer;
+    text-align: center;
+    line-height: 1.4;
+
+    .loaded & {
+      transition: all 0.3s ease 0s;
+    }
+
+    @media (any-hover: hover){
+      &:hover{
+        background-color: var(--green-light-color);
+      }
+    }
+
+    i {
+      flex: 0 0 mixins.toRem(60);
+      width: mixins.toRem(60);
+      height: mixins.toRem(60);
+      border-radius: 50%;
+      background-color: var(--green-small-light-color);
+      display: flex;
+      justify-content:center;align-items: center;
+    }
+  }
+}
