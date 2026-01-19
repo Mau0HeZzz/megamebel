@@ -4,7 +4,9 @@
 import { mhzModules } from "../modules.js";
 
 // Подключение модуля
-import "inputmask/dist/inputmask.min.js";
+// import "inputmask/dist/inputmask.min.js";
+
+import Inputmask from "inputmask";
 
 const inputMasks = document.querySelectorAll('[data-inputmask]');
 if (inputMasks.length) {

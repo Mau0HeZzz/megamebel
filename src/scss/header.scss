@@ -14,24 +14,26 @@
   }
 
   &__city {
-    display: flex;
-    align-items: center;
-    gap: mixins.toRem(6);
-    color: var(--accent-color);
-    font-weight: 500;
-    font-size: mixins.toRem(14);
-    .loaded & {
-      transition: color 0.3s ease 0s;
-    }
-    @media (any-hover: hover){
-      &:hover{
-        color: var(--accent-hover-color);
+    .select-city__block {
+      display: flex;
+      align-items: center;
+      gap: mixins.toRem(6);
+      color: var(--accent-color);
+      font-weight: 500;
+      font-size: mixins.toRem(14);
+      .loaded & {
+        transition: color 0.3s ease 0s;
       }
-    }
-
-    @media (width < #{mixins.toEm(variables.$mobileSmall)}){
-      color: var(--grey-color);
-      font-size: mixins.toRem(13);
+      @media (any-hover: hover){
+        &:hover{
+          color: var(--accent-hover-color);
+        }
+      }
+  
+      @media (width < #{mixins.toEm(variables.$mobileSmall)}){
+        color: var(--grey-color);
+        font-size: mixins.toRem(13);
+      }
     }
   }
 
@@ -418,17 +420,20 @@
   }
 }
 .search-header {
-  align-self: stretch;
-  position: relative;
   border-radius: mixins.toRem(15);
   border: mixins.toRem(1) solid var(--stroke-color);
-  display: flex;
   padding: mixins.toRem(16) mixins.toRem(20);
 
   @media (width < #{mixins.toEm(variables.$mobile)}){
     font-size: mixins.toRem(14);
     padding: mixins.toRem(14);
     border-radius: mixins.toRem(12);
+  }
+  &, &>form {
+    align-self: stretch;
+    position: relative;
+    display: flex;
+    flex: 1 1 auto;
   }
 
   &__input {
