@@ -286,6 +286,9 @@ export function formSubmit() {
 				let formAction = form.getAttribute('action') ? form.getAttribute('action').trim() : '#';
 				const formMethod = form.getAttribute('method') ? form.getAttribute('method').trim() : 'GET';
 				const formData = new FormData(form);
+        if (window.BX) {
+          formData.set('sessid', BX.bitrix_sessid());
+        }
 
 				form.classList.add('_sending');
         const options = {
@@ -300,9 +303,10 @@ export function formSubmit() {
 				if (response.ok) {
 					let responseResult = await response.text();
 					form.classList.remove('_sending');
-					formSent(form, responseResult);
+					formSent(form, responseResult, formData);
 				} else {
-          formError(form);
+					let responseResult = await response.text();
+          formError(form, responseResult);
 					form.classList.remove('_sending');
 				}
 			} else if (form.hasAttribute('data-dev')) {	// Если режим разработки
@@ -343,12 +347,13 @@ export function formSubmit() {
     return answer;
   }
 	// Действия после отправки формы
-	function formSent(form, responseResult = `{"success": true}`) {
+	function formSent(form, responseResult = `{"success": true}`, formData) {
 		// Создаем событие отправки формы
 		document.dispatchEvent(new CustomEvent("formSent", {
 			detail: {
-				form: form,
-        responseResult
+				form,
+        responseResult,
+        formData
 			}
 		}));
 		// Попап показывает, если подключен модуль попапов

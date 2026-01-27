@@ -1,6 +1,6 @@
 // Подключение функционала "Чертоги Фрилансера"
 import stickySidebar from "sticky-sidebar";
-import { bodyLockToggle, bodyUnlock, debounce, getRandomString, isMobile } from "./functions.js";
+import { bodyLockToggle, bodyUnlock, getDigFromString, getRandomString, isMobile } from "./functions.js";
 // Подключение списка активных модулей
 import { mhzModules } from "./modules.js";
 import PincodeInput from 'pincode-input'
@@ -35,6 +35,8 @@ document.addEventListener('DOMContentLoaded', () => {
   if (comparsionParent) {
     new MhzComparsion(comparsionParent)
   }
+
+  setProductsButtons()
 })
 
 document.addEventListener('click', (e) => {
@@ -77,10 +79,21 @@ document.addEventListener('click', (e) => {
     }
   }
 
-  const productAction = e.target.closest('[data-comparsion-btn]') || e.target.closest('[data-fav-btn]');
-  if (productAction) {
-    e.preventDefault();
-    productAction.classList.toggle('_active')
+  // const productAction = e.target.closest('[data-comparsion-btn]') || e.target.closest('[data-fav-btn]');
+  // if (productAction) {
+  //   e.preventDefault();
+  //   productAction.classList.toggle('_active')
+  // }
+
+  if (e.target.closest('[data-fav-btn]')) {
+    favComparsionBtnAction(e.target.closest('[data-fav-btn]'), 'favorite')
+  }
+  if (e.target.closest('[data-comparsion-btn]')) {
+    favComparsionBtnAction(e.target.closest('[data-comparsion-btn]'), 'comparsion')
+  }
+
+  if (e.target.closest('[data-add2basket-btn]')) {
+    onAddToBasketClick(e.target.closest('[data-add2basket-btn]'))
   }
 
   checkCatalog(e)
@@ -96,9 +109,9 @@ window.addEventListener('resize', () => {
 })
 
 document.addEventListener('formSent', (e) => {
-  const { form } = e.detail;
+  const { form, responseResult, formData } = e.detail;
 
-  if (form.closest('#phoneAuthPopup')) mhzModules.popup.open('#phonePinPopup')
+  if (form.closest('.authPopup')) authActions(form, responseResult, formData)
 })
 
 window.addEventListener('load', () => {
@@ -211,7 +224,9 @@ function checkCatalog(e) {
   if (catalogTarget||catalogBtnTarget) return;
 
   document.documentElement.classList.remove('catalog-open');
-  bodyUnlock();
+  if (document.documentElement.classList.contains('lock')) {
+    bodyUnlock();
+  }
 }
 
 function setMaxHeight(selector, parentSelector) {
@@ -255,8 +270,18 @@ function pininputsInit(pininputs) {
     pininput.pininput = new PincodeInput(`.${className}`, {
       count: 4,
       secure: false,
+      onInput: (value) => {
+        onPinInputInput(value, pininput)
+      }
     })
   })
+}
+
+function onPinInputInput(value, input) {
+  const authPinElement = input?.closest('form')?.querySelector('[name="auth_pin"]');
+  if (!authPinElement) return;
+
+  authPinElement.value = value;
 }
 
 function setFiltersPosition(filtersEl) {
@@ -268,7 +293,7 @@ function setFiltersPosition(filtersEl) {
   })
 }
 
-function mhzFullCartActions(cartFull) {
+window.mhzFullCartActions = (cartFull) =>  {
   const oneCheckboxes = cartFull?.querySelectorAll('[data-full-cart-checkone]');
   const allCheckbox = cartFull?.querySelector('[data-full-cart-checkall]');
 
@@ -568,6 +593,364 @@ class MhzComparsion {
           break;
         }
         break;
+    }
+  }
+}
+
+function authActions(form, responseResult, formData) {
+  if (!form.closest('.authPopup')) return;
+
+  try {
+    responseResult = JSON.parse(responseResult);
+  } catch (error) {
+    console.warn(error);
+    return;
+  }
+
+  const { STATUS: status, RELOAD: reload, DATA: data } = responseResult;
+  if (!status) {
+    if (reload) location.reload()
+    return;
+  }
+
+  if (form.closest('#phoneAuthPopup')) onPhoneAuthSubmit(data, formData)
+  if (form.closest('#phonePinPopup')) onPhonePinSubmit(status, reload)
+  if (form.closest('#registerPopup')) onRegisterSubmit(data, status, reload)
+  if (form.closest('#emailAuthPopup')) onEmailAuthSubmit(data, status, reload)
+  if (form.closest('#restorePassPopup')) onRestorePassSubmit(formData)
+}
+
+function onPhoneAuthSubmit(data, formData) {
+  const pinPopup = document.querySelector('#phonePinPopup');
+  if (!pinPopup) return;
+
+  const { key, phone } = data;
+  const sendedPhone = formData.get('phone');
+
+  const subtitleEl = pinPopup.querySelector('.authPopup__subtitle');
+  if (subtitleEl) {
+    subtitleEl.innerHTML = `На ваш номер ${sendedPhone} поступил звонок. Укажите последние 4 цифры`
+  }
+
+  const autKeyInput = pinPopup.querySelector('[name="auth_key"]');
+  if (autKeyInput) {
+    autKeyInput.value = key;
+  }
+
+  const phoneInput = pinPopup.querySelector('[name="phone"]');
+  if (phoneInput) {
+    phoneInput.value = phone;
+  }
+
+  mhzModules.popup.open('#phonePinPopup');
+}
+
+function onPhonePinSubmit(status, reload) {
+  if (!status) {
+    if (reload) location.reload();
+    return;
+  }
+  const successSelector = '#registerSuccessPopup';
+  const successPopup = document.querySelector(successSelector);
+  if (successPopup) {
+    const titleEl = successPopup.querySelector('.authPopup__title');
+    const textEl = successPopup.querySelector('.authPopup__text');
+
+    if (titleEl) titleEl.innerHTML = 'Вход'
+    if (textEl) textEl.innerHTML = 'Вы успешно авторизованы'
+  }
+
+  mhzModules.popup.open(successSelector);
+  if (reload) {
+    setTimeout(() => {
+      location.reload();
+    }, 3000);
+  }
+}
+
+function onRegisterSubmit(data, status, reload) {
+  if (!status) {
+    if (reload) location.reload();
+    return;
+  }
+
+  const successSelector = `#${data.popup || 'registerSuccessPopup'}`;
+  const successPopup = document.querySelector(successSelector);
+  if (successPopup) {
+    const titleEl = successPopup.querySelector('.authPopup__title');
+    const textEl = successPopup.querySelector('.authPopup__text');
+
+    if (titleEl) titleEl.innerHTML = 'Регистрация'
+    if (textEl) textEl.innerHTML = data.TEXT || 'Спасибо за регистрацию';
+  }
+
+  mhzModules.popup.open(successSelector);
+  if (reload) {
+    setTimeout(() => {
+      location.reload();
+    }, 3000);
+  }
+}
+
+function onEmailAuthSubmit(data, status, reload) {
+  if (!status) {
+    if (reload) location.reload();
+    return;
+  }
+  const successSelector = '#registerSuccessPopup';
+  const successPopup = document.querySelector(successSelector);
+  if (successPopup) {
+    const titleEl = successPopup.querySelector('.authPopup__title');
+    const textEl = successPopup.querySelector('.authPopup__text');
+
+    if (titleEl) titleEl.innerHTML = 'Вход'
+    if (textEl) textEl.innerHTML = 'Вы успешно авторизованы'
+  }
+
+  mhzModules.popup.open(successSelector);
+  if (reload) {
+    setTimeout(() => {
+      location.reload();
+    }, 3000);
+  }
+}
+
+function onRestorePassSubmit(formData) {
+  const successSelector = '#restorePassSuccessPopup';
+  const email = formData.get('EMAIL')
+
+  const textEl = document.querySelector(`${successSelector} .authPopup__text`);
+  if (textEl) textEl.innerHTML = `Ссылка на восстановления пароля была направлена на Ваш почтовый ящик <strong>${email}</strong>`;
+
+  mhzModules.popup.open(successSelector);
+}
+
+async function favComparsionBtnAction(target, actionType) {
+  const productId = target?.closest('[data-product_id]')?.getAttribute('data-product_id');
+  if (!productId) return;
+
+  const type = target.classList.contains('_active') ? 'REMOVE' : 'ADD';
+
+  let url;
+
+  switch (actionType) {
+    case 'favorite':
+      url = window.urls?.favorites || '/ajax/favorites_megamebel.php';
+      break;
+    case 'comparsion':
+      url = window.urls?.comparsion || '/ajax/comparsion_megamebel.php';
+      break;
+  }
+  if (!url) return;
+  target.classList.add('_pen');
+  const body = new FormData();
+
+  if (window.BX) body.set('sessid', BX.bitrix_sessid());
+  body.set('ID', productId);
+  body.set('TYPE', type);
+
+  await fetch(url, {
+    method: 'POST',
+    body,
+  })
+    .then(res => res.json())
+    .then(res => {
+      if (!res.STATUS) return;
+
+      switch (actionType) {
+        case 'favorite':
+          window.favorites = window.favorites || [];
+          if (type === 'ADD') {
+            window.favorites.push(`${productId}`);
+          } else {
+            window.favorites = window.favorites.filter(el => el !== productId)
+          }
+          break;
+        case 'comparsion':
+          window.comparsion = window.comparsion || [];
+          if (type === 'ADD') {
+            window.comparsion.push(`${productId}`);
+          } else {
+            window.comparsion = window.comparsion.filter(el => el !== productId)
+          }
+          break;
+      }
+
+      setProductsButtons();
+    })
+    .catch(console.warn)
+
+  target.classList.remove('_pen');
+}
+
+function setNavButtonCounter(actionType, type) {
+  const btns = document.querySelectorAll(`[data-header-${actionType}] i`);
+  
+  let count = getDigFromString(btns[0].innerHTML);
+  if (isNaN(count)) count = 0
+
+  switch (type) {
+    case 'ADD':
+      count++
+      break;
+    case 'REMOVE':
+      count--
+      break;
+  }
+
+  if (count < 0) count = 0;
+
+  for (let index = 0; index < btns.length; index++) {
+    const btn = btns[index];
+    btn.innerHTML = count ? count : '';
+  }
+}
+
+async function onAddToBasketClick(target) {
+  const parent = target?.closest('[data-offer_id]');
+  const offerId = parent?.getAttribute('data-offer_id');
+  if (!offerId) return;
+  target.classList.add('_pen');
+
+  const quantity = getDigFromString(parent.getAttribute('data-quantity') || '1');
+
+  const url = window.urls?.add2basket || '/ajax/add2basket_megamebel.php';
+
+  const body = new FormData();
+
+  if (window.BX) body.set('sessid', BX.bitrix_sessid());
+  body.set('ID', offerId);
+  body.set('QUANTITY', quantity);
+
+  await fetch(url, {
+    method: 'POST',
+    body
+  })
+    .then(res => res.json())
+    .then(res => {
+      if (!res.STATUS) return;
+      window.basketData.push({PRODUCT_ID: offerId})
+
+      setProductsButtons();
+    })
+    .catch(console.warn)
+
+  target.classList.remove('_pen');
+}
+
+function setProductsButtons() {
+  window.comparsion = Object.values(window.comparsion || []);
+  window.favorites = Object.values(window.favorites || []);
+  window.basketData = Object.values(window.basketData || []);
+
+  console.log('window.comparsion', window.comparsion);
+  console.log('window.favorites', window.favorites);
+  console.log('window.basketData', window.basketData);
+
+  clearFavComparsionBtns();
+
+  for (let index = 0; index < window.favorites.length; index++) {
+    const id = window.favorites[index];
+    
+    const items = document.querySelectorAll(`[data-product_id="${id}"] [data-fav-btn]`);
+    if (items.length) {
+      items.forEach(item => item.classList.add('_active'));
+    }
+  }
+  for (let index = 0; index < window.comparsion.length; index++) {
+    const id = window.comparsion[index];
+    
+    const items = document.querySelectorAll(`[data-product_id="${id}"] [data-comparsion-btn]`);
+    if (items.length) {
+      items.forEach(item => item.classList.add('_active'));
+    }
+  }
+
+  const headerFavoritesButtons = document.querySelectorAll('[data-header-favorite] i');
+  if (headerFavoritesButtons.length) {
+    headerFavoritesButtons.forEach(headerFavoritesButton => {
+      if (window.favorites.length > 0) {
+        headerFavoritesButton.innerHTML = window.favorites.length;
+      } else {
+        headerFavoritesButton.innerHTML = '';
+      }
+    })
+  }
+  const headerComparsionButtons = document.querySelectorAll('[data-header-comparsion] i');
+  if (headerComparsionButtons.length) {
+    headerComparsionButtons.forEach(headerComparsionButton => {
+      if (window.comparsion.length > 0) {
+        headerComparsionButton.innerHTML = window.comparsion.length;
+      } else {
+        headerComparsionButton.innerHTML = '';
+      }
+    })
+  }
+
+  if (window.basketData.length) {
+    setBasketButtons();
+  }
+}
+
+function clearFavComparsionBtns() {
+  const favBtns = document.querySelectorAll(`[data-product_id] [data-fav-btn]`);
+  const comparsionBtns = document.querySelectorAll(`[data-product_id] [data-comparsion-btn]`);
+  for (let index = 0; index < favBtns.length; index++) {
+    const btn = favBtns[index];
+    btn.classList.remove('_active')
+  }
+  for (let index = 0; index < comparsionBtns.length; index++) {
+    const btn = comparsionBtns[index];
+    btn.classList.remove('_active')
+  }
+}
+
+function setBasketButtons() {
+  const headerBasketButtons = document.querySelectorAll('[data-header-basket] i');
+  if (headerBasketButtons.length) {
+    headerBasketButtons.forEach(headerBasketButton => {
+      if (window.basketData.length > 0) {
+        headerBasketButton.innerHTML = window.basketData.length
+      } else {
+        headerBasketButton.innerHTML = '';
+      }
+    })
+  }
+
+  for (let index = 0; index < window.basketData.length; index++) {
+    const { PRODUCT_ID: productId } = window.basketData[index];
+    const products = document.querySelectorAll(`[data-product_id="${productId}"]`);
+    const offers = document.querySelectorAll(`[data-product_id="${productId}"]`);
+
+    if (products.length) {
+      products.forEach(el => {
+        const addToBasketBtn = el.querySelector('[data-add2basket-btn]');
+        const activeBtn = el.querySelector('.product-slide__button._active');
+        if (activeBtn) {
+          activeBtn.hidden = false;
+          addToBasketBtn.hidden = true;
+        } else {
+          addToBasketBtn.innerHTML = 'В корзине';
+          addToBasketBtn.removeAttribute('data-add2basket-btn');
+          addToBasketBtn.setAttribute('href', '/basket/')
+          addToBasketBtn.classList.add('_active');
+        }
+      })
+    }
+    if (offers.length) {
+      offers.forEach(el => {
+        const addToBasketBtn = el.querySelector('[data-add2basket-btn]');
+        const activeBtn = el.querySelector('.product-slide__button._active');
+        if (activeBtn) {
+          activeBtn.hidden = false;
+          addToBasketBtn.hidden = true;
+        } else {
+          addToBasketBtn.innerHTML = 'В корзине';
+          addToBasketBtn.removeAttribute('data-add2basket-btn');
+          addToBasketBtn.setAttribute('href', '/basket/')
+          addToBasketBtn.classList.add('_active');
+        }
+      })
     }
   }
 }

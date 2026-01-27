@@ -117,6 +117,12 @@
       grid-template-columns: 2.1fr 1fr;
       align-items: start;
     }
+
+    #basket-item-table {
+      display: flex;
+      flex-direction: column;
+      gap: mixins.toRem(14);
+    }
   }
 
   &__product {
@@ -278,6 +284,10 @@
     color: var(--grey-color);
     text-decoration: line-through;
     font-size: mixins.toRem(14);
+
+    &:empty {
+      display: none;
+    }
   }
 
   &__shtprice {

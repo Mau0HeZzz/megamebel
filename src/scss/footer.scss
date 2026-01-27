@@ -208,6 +208,15 @@
   padding: mixins.toRem(10) 0 mixins.toRem(13);
   border-top: mixins.toRem(1) solid var(--stroke-color);
 
+  .loaded & {
+    transition: all 0.3s ease 0s;
+  }
+
+  .menu-open & {
+    opacity: 0;
+    pointer-events: none;
+  }
+
   &__link {
     display: flex;
     flex-direction: column;
@@ -241,6 +250,9 @@
       top: 0;
       right: 50%;
       translate: 100% -25%;
+      &:empty {
+        display: none;
+      }
     }
 
     strong {

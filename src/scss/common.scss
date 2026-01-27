@@ -921,3 +921,25 @@ ul li {
     &:not(:last-child) {margin-bottom: mixins.toRem(10);}
   }
 }
+
+.top-header__city .select-city {
+  &__modal {
+
+    &-wrap {
+      margin: 0;
+    }
+
+    &[style="display: block;"] {
+      display: flex !important;
+      justify-content:center;align-items: center;
+    }
+  }
+
+  &__close {
+    right: 0;
+    width: mixins.toRem(40);
+    height: mixins.toRem(40);
+    background-size: mixins.toRem(20) mixins.toRem(20);
+    background-repeat: no-repeat;
+  }
+}

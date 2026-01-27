@@ -46,6 +46,8 @@ mhzFunctions.setBodyHeightsVars();
 */
 mhzFunctions.spollers();
 
+window.mhzSpollers = mhzFunctions.spollers;
+
 /*
 Модуль "Табы"
 Документация: https://start-template.ru/modul-taby-chertogi-frilansera-v3-0-0/

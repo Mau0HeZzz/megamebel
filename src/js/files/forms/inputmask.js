@@ -8,7 +8,7 @@ import { mhzModules } from "../modules.js";
 
 import Inputmask from "inputmask";
 
-const inputMasks = document.querySelectorAll('[data-inputmask]');
+const inputMasks = document.querySelectorAll('input[data-inputmask]');
 if (inputMasks.length) {
 	mhzModules.inputmask = Inputmask().mask(inputMasks);
 }
