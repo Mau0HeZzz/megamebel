@@ -12,6 +12,12 @@
     @media (width < #{mixins.toEm(variables.$mobileSmall)}){
       padding: mixins.toRem(60) mixins.toRem(15) mixins.toRem(30);
     }
+
+    &:has(.authPopup__head) {
+      >.popup__close {
+        display: none;
+      }
+    }
   }
 
   &__form {
@@ -33,6 +39,18 @@
     a {
       color: var(--accent-color);
       text-decoration: underline;
+    }
+  }
+
+  &__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: mixins.toRem(12);
+    width: 100%;
+
+    .popup__close {
+      position: static;
     }
   }
 

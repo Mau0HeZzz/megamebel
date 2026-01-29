@@ -73,8 +73,10 @@ export function formFieldsInit(options = { viewPass: false }) {
 }
 // Валидация форм
 export let formValidate = {
-	getErrors(form) {
+  setErrors: true,
+	getErrors(form, setErrors = true) {
 		let error = 0;
+    this.setErrors = setErrors;
 		let formRequiredItems = form.querySelectorAll('*[data-required]');
 		if (formRequiredItems.length) {
 			formRequiredItems.forEach(formRequiredItem => {
@@ -159,6 +161,7 @@ export let formValidate = {
 		return error;
 	},
 	addError(formRequiredItem, errorTextArg) {
+    if (!this.setErrors) return;
 		let inputError = formRequiredItem.parentElement.querySelector('.form__error');
 		if (inputError) formRequiredItem.parentElement.removeChild(inputError);
     let errorText = errorTextArg || formRequiredItem.dataset.error;
@@ -261,6 +264,7 @@ export let formValidate = {
 		return !/^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$/.test(formRequiredItem.value.replace(/\-|\s/g, ''));
 	}
 }
+window.formValidate = formValidate;
 /* Отправка форм*/
 export function formSubmit() {
 	const forms = document.forms;
@@ -278,7 +282,6 @@ export function formSubmit() {
 	}
 	async function formSubmitAction(form, e) {
     const error = !form.hasAttribute('data-no-validate') ? formValidate.getErrors(form) : 0;
-    console.log('formSubmitAction', error);
 		if (error === 0) {
 			const ajax = form.hasAttribute('data-ajax');
 			if (ajax) { // Если режим ajax
@@ -433,7 +436,7 @@ export function formQuantity() {
             --value;
             plusBtn.disabled = false;
             disEvt = true;
-            if (value <= min) {
+            if (value < min) {
               value = min;
               minusBtn.disabled = true;
               disEvt = false;
@@ -441,6 +444,7 @@ export function formQuantity() {
             }
           }
           input.value = value;
+          input.setAttribute('value', value);
 
           if (disEvt) {
             const event = new CustomEvent('changeQuantity', {

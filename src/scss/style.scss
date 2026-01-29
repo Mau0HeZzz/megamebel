@@ -42,7 +42,7 @@ body {
 	display: flex;
 	flex-direction: column;
 	overflow: hidden;
-  padding-top: var(--bxPanelHeight);
+  // padding-top: var(--bxPanelHeight);
 	@supports (overflow: clip) {
 		overflow: clip;
 	}

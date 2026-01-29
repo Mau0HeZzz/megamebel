@@ -1034,7 +1034,7 @@
     position: fixed;
     left: 0;
     right: 0;
-    top: calc(var(--headerHeight) - var(--scrollY, 0px));
+    top: calc(var(--headerHeight) + var(--bxPanelHeight, 0px) - var(--scrollY, 0px));
     max-height: calc(100dvh - var(--headerHeight) + var(--scrollY, 0px));
     overflow: hidden;
     opacity: 0;

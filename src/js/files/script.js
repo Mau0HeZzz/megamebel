@@ -1,9 +1,13 @@
 // Подключение функционала "Чертоги Фрилансера"
 import stickySidebar from "sticky-sidebar";
-import { bodyLockToggle, bodyUnlock, getDigFromString, getRandomString, isMobile } from "./functions.js";
+import { bodyLock, bodyLockToggle, bodyUnlock, debounce, getDigFromString, getRandomString, isMobile } from "./functions.js";
 // Подключение списка активных модулей
 import { mhzModules } from "./modules.js";
 import PincodeInput from 'pincode-input'
+import { formValidate } from "./forms/forms.js";
+import Inputmask from "inputmask";
+import Toastify from 'toastify-js'
+import "toastify-js/src/toastify.css"
 // import 'pincode-input/dist/pincode-input.min.css'
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -28,6 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const cartFull = document.querySelector('[data-full-cart]');
   if (cartFull) {
+    checkCartClearBtnVisible(cartFull);
     mhzFullCartActions(cartFull)
   }
 
@@ -36,7 +41,9 @@ document.addEventListener('DOMContentLoaded', () => {
     new MhzComparsion(comparsionParent)
   }
 
-  setProductsButtons()
+  setProductsButtons();
+
+  document.oncontextmenu = (e) => disablecontext(e, 'Вы не можете сохранять изображения с этого сайта.')
 })
 
 document.addEventListener('click', (e) => {
@@ -96,22 +103,38 @@ document.addEventListener('click', (e) => {
     onAddToBasketClick(e.target.closest('[data-add2basket-btn]'))
   }
 
+  if (e.target.closest('[data-full-cart-clear]')) {
+    delCheckedFromCart()
+  }
+
   checkCatalog(e)
-})
-
-window.addEventListener('scroll', (e) => {
-  document.body.style.setProperty('--scrollY', `${window.scrollY}px`);
-})
-
-window.addEventListener('resize', () => {
-  setMaxHeight('.categories__slide span');
-  setMaxHeight('.product-slide__name', '.productslider');
 })
 
 document.addEventListener('formSent', (e) => {
   const { form, responseResult, formData } = e.detail;
 
   if (form.closest('.authPopup')) authActions(form, responseResult, formData)
+})
+
+document.addEventListener('watcherCallback', (e) => {
+  const { target, isIntersecting } = e.detail.entry;
+
+  if (target.closest('.sidebar-cartfull')) {
+    const cartFixed = document.querySelector('.cartfull__fixed');
+    if (!cartFixed) return;
+
+    isIntersecting ? cartFixed.classList.add('_hide') : cartFixed.classList.remove('_hide')
+  }
+})
+
+document.addEventListener('change', (e) => {
+  if (e.target.closest('.cartfull [data-services]')) {
+    onBasketServicesChange(e.target.closest('.cartfull [data-services]'), e.target)
+  }
+
+  if (e.target.closest('#checkout-cartfull [data-basket-onchange]')) {
+    onBasketChange()
+  }
 })
 
 window.addEventListener('load', () => {
@@ -130,15 +153,13 @@ window.addEventListener('load', () => {
   }
 })
 
-document.addEventListener('watcherCallback', (e) => {
-  const { target, isIntersecting } = e.detail.entry;
+window.addEventListener('scroll', (e) => {
+  document.body.style.setProperty('--scrollY', `${window.scrollY}px`);
+})
 
-  if (target.closest('.sidebar-cartfull')) {
-    const cartFixed = document.querySelector('.cartfull__fixed');
-    if (!cartFixed) return;
-
-    isIntersecting ? cartFixed.classList.add('_hide') : cartFixed.classList.remove('_hide')
-  }
+window.addEventListener('resize', () => {
+  setMaxHeight('.categories__slide span');
+  setMaxHeight('.product-slide__name', '.productslider');
 })
 
 
@@ -300,10 +321,12 @@ window.mhzFullCartActions = (cartFull) =>  {
   if (!oneCheckboxes?.length || !allCheckbox) return
 
   allCheckbox.addEventListener('change', () => {
-    oneCheckboxes.forEach(oneCheckbox => oneCheckbox.checked = allCheckbox.checked)
+    oneCheckboxes.forEach(oneCheckbox => oneCheckbox.checked = allCheckbox.checked);
+    checkCartClearBtnVisible(cartFull);
   })
 
   cartFull.addEventListener('change', (e) => {
+    checkCartClearBtnVisible(cartFull);
     const array = [...oneCheckboxes];
     if (!array.includes(e.target)) return;
 
@@ -317,6 +340,15 @@ window.mhzFullCartActions = (cartFull) =>  {
 
     allCheckbox.checked = true;
   })
+}
+
+window.checkCartClearBtnVisible = (cartFull = document.querySelector('[data-full-cart]')) => {
+  if (!cartFull) return;
+  const btn = document.querySelector('[data-full-cart-clear]');
+  if (!btn) return;
+
+  const oneCheckboxes = cartFull?.querySelectorAll('[data-full-cart-checkone]:checked');
+  btn.hidden = oneCheckboxes.length <= 0;
 }
 
 class MhzComparsion {
@@ -783,29 +815,6 @@ async function favComparsionBtnAction(target, actionType) {
   target.classList.remove('_pen');
 }
 
-function setNavButtonCounter(actionType, type) {
-  const btns = document.querySelectorAll(`[data-header-${actionType}] i`);
-  
-  let count = getDigFromString(btns[0].innerHTML);
-  if (isNaN(count)) count = 0
-
-  switch (type) {
-    case 'ADD':
-      count++
-      break;
-    case 'REMOVE':
-      count--
-      break;
-  }
-
-  if (count < 0) count = 0;
-
-  for (let index = 0; index < btns.length; index++) {
-    const btn = btns[index];
-    btn.innerHTML = count ? count : '';
-  }
-}
-
 async function onAddToBasketClick(target) {
   const parent = target?.closest('[data-offer_id]');
   const offerId = parent?.getAttribute('data-offer_id');
@@ -842,10 +851,6 @@ function setProductsButtons() {
   window.comparsion = Object.values(window.comparsion || []);
   window.favorites = Object.values(window.favorites || []);
   window.basketData = Object.values(window.basketData || []);
-
-  console.log('window.comparsion', window.comparsion);
-  console.log('window.favorites', window.favorites);
-  console.log('window.basketData', window.basketData);
 
   clearFavComparsionBtns();
 
@@ -925,6 +930,7 @@ function setBasketButtons() {
     if (products.length) {
       products.forEach(el => {
         const addToBasketBtn = el.querySelector('[data-add2basket-btn]');
+        if (!addToBasketBtn) return;
         const activeBtn = el.querySelector('.product-slide__button._active');
         if (activeBtn) {
           activeBtn.hidden = false;
@@ -940,6 +946,7 @@ function setBasketButtons() {
     if (offers.length) {
       offers.forEach(el => {
         const addToBasketBtn = el.querySelector('[data-add2basket-btn]');
+        if (!addToBasketBtn) return;
         const activeBtn = el.querySelector('.product-slide__button._active');
         if (activeBtn) {
           activeBtn.hidden = false;
@@ -955,4 +962,74 @@ function setBasketButtons() {
   }
 }
 
+async function onBasketServicesChange(parent, target) {
+  const url = parent.getAttribute('data-ajax');
+  if (!url) return;
+
+  const method = parent.getAttribute('method') || 'POST';
+  
+  const body = new FormData();
+  if (window.BX) body.set('sessid', BX.bitrix_sessid());
+  const inputs = parent.querySelectorAll('input');
+  if (!inputs.length) return;
+
+  for (let index = 0; index < inputs.length; index++) {
+    const input = inputs[index];
+    const name = input.name;
+    const value = input.checked ? 'Y' : '';
+
+    body.set(name, value);
+  }
+
+  const options = {
+    method
+  }
+
+  if (method !== 'GET') options.body = body;
+
+  bodyLock(0);
+  document.documentElement.classList.add('_pen');
+
+  await fetch(url, options)
+    .catch(console.warn)
+    .then(res => res.text())
+    .then(console.log)
+
+  bodyUnlock(0);
+  document.documentElement.classList.remove('_pen');
+}
+
+function delCheckedFromCart() {
+  const checkedItemsButtons = document.querySelectorAll('[data-entity="basket-item"]:has([data-full-cart-checkone]:checked) [data-entity="basket-item-delete"]');
+  if (!checkedItemsButtons.length) return;
+
+  for (let index = 0; index < checkedItemsButtons.length; index++) {
+    const button = checkedItemsButtons[index];
+    button.click()
+  }
+
+  function onBXAjaxSuccess() {
+      setTimeout(() => {
+        const basketItems = document.querySelectorAll('[data-entity="basket-item"]:not([hidden])');
+        if (!basketItems.length) location.reload();
+      }, 1000);
+      BX.removeCustomEvent('onAjaxSuccess', onBXAjaxSuccess);
+  }
+
+  if (window.BX) {
+    BX.addCustomEvent('onAjaxSuccess', onBXAjaxSuccess)
+  }
+
+  checkCartClearBtnVisible();
+}
+
+function disablecontext(e, errorMsg = 'Вы не можете сохранять изображения с этого сайта.') {
+    var clickedEl = e == null ? event.srcElement.tagName : e.target.tagName;
+    if (clickedEl == 'IMG') {
+        alert(errorMsg);
+        return false;
+    }
+}
+
+window.Toastify = Toastify;
 window.mhzModules = mhzModules;
