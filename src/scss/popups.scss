@@ -198,3 +198,137 @@
     }
   }
 }
+
+
+.deliveryPopup {
+
+  &__content {
+    max-width: mixins.toRem(1250);
+  }
+
+  &__head {
+    padding-bottom: mixins.toRem(15);
+    border-bottom: mixins.toRem(1) solid var(--stroke-color);
+  }
+
+  &__title {
+    line-height: 1.2;
+    font-size: mixins.toRem(20);
+    width: 600px;
+  }
+
+  &__main {
+    @include mixins.adaptiveValue("padding-top", 30, 20, 767, 480);
+    @include mixins.adaptiveValue("padding-bottom", 30, 20, 767, 480);
+  }
+
+  &__section {
+    &:not(:last-child) {margin-bottom: mixins.toRem(30);}
+  }
+
+  &__sectiontitle {
+    font-size: mixins.toRem(24);
+    font-weight: 600;
+    &:not(:last-child) {margin-bottom: mixins.toRem(20);}
+  }
+
+  &__items {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: mixins.toRem(15);
+
+    @media (width < #{mixins.toEm(600)}) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  &__item {
+    display: flex;
+    flex-direction: column;
+    gap: mixins.toRem(15);
+    align-items: center;
+    text-align: center;
+    background-color: var(--plate-bg-color);
+    border-radius: mixins.toRem(15);
+    padding: mixins.toRem(15);
+
+    img {
+      max-height: mixins.toRem(60);
+      display: block;
+    }
+
+    ._img-group {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: mixins.toRem(7);
+
+      img {
+        &:last-child:is(:nth-child(odd)) {
+          grid-column: span 2;
+          margin: 0 auto;
+        }
+      }
+    }
+
+    span {
+      margin-top: auto;
+    }
+  }
+
+  &__wysiwyg {
+    max-width: 100%;
+    overflow: auto;
+
+    h1, h2, h3, h4, h5 {
+      font-weight: 700;
+    }
+
+    a {
+      color: var(--accent-color);
+      font-size: mixins.toRem(14);
+
+      @media (any-hover: hover) {
+        &:hover{
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+
+  &__table {
+    border-collapse: collapse;
+    &:not(:last-child) {margin-bottom: mixins.toRem(30);}
+
+    caption {
+      caption-side: bottom;
+      text-align: left;
+      padding: mixins.toRem(12) 0;
+      color: var(--grey-color);
+    }
+    td, th {
+      padding: mixins.toRem(12) mixins.toRem(15);
+      border-top: mixins.toRem(1) solid var(--stroke-color);
+      text-align-last: left;
+    }
+
+    th {
+      &:first-child {
+        white-space: nowrap;
+      }
+    }
+
+    tbody {
+      tr {
+        &:nth-child(odd) {
+          background-color: var(--plate-bg-color);
+        }
+
+        &:last-child {
+          td {
+            border-bottom: mixins.toRem(1) solid var(--stroke-color);
+          }
+        }
+      }
+    }
+  }
+}

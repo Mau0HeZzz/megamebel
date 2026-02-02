@@ -37,9 +37,11 @@ body::after {
   &_show {
     z-index: 150;
     visibility: visible;
-    overflow: auto;
     pointer-events: auto;
     overscroll-behavior: contain;
+    @media (width >= #{mixins.toEm(variables.$mobile)}) {
+      overflow: auto;
+    }
   }
   @media (max-width:mixins.toEm(variables.$mobile)){
     ._isChrome &::-webkit-scrollbar {
@@ -74,9 +76,12 @@ body::after {
     width: 100%;
     max-width: mixins.toRem(900);
     position: relative;
+    padding-left: var(--padding-left);
+    padding-right: var(--padding-right);
+    
     @include mixins.adaptiveValue("padding-bottom", 40, 36);
-    @include mixins.adaptiveValue("padding-left", 30, 16);
-    @include mixins.adaptiveValue("padding-right", 30, 16);
+    @include mixins.adaptiveValue("--padding-left", 30, 16);
+    @include mixins.adaptiveValue("--padding-right", 30, 16);
     .lock & {
       visibility: visible;
     }
@@ -89,10 +94,10 @@ body::after {
       translate: 0 mixins.toRem(20);
     }
     @media (max-width: mixins.toEm(variables.$mobile) ){
-      // max-height: 100%;
+      max-height: 100%;
       border-radius: mixins.toRem(20) mixins.toRem(20) 0 0;
       translate: 0 100%;
-      min-height: 80vh;
+      height: calc(100dvh - mixins.toRem(30));
       // overflow: auto;
       display: flex;
       flex-direction: column;
@@ -119,8 +124,8 @@ body::after {
 
   &__body {
     @media (max-width:mixins.toEm(variables.$mobile)){
-      // max-height: 100%;
-      // overflow: auto;
+      max-height: 100%;
+      overflow: clip auto;
       flex: 1 1 auto;
       display: flex;
       flex-direction: column;
